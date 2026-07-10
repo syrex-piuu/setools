@@ -7647,9 +7647,13 @@
                 });
                 var btn = el('btn-simpan-riwayat-utp');
                 btn.classList.add('is-saved');
-                setTimeout(function () { btn.classList.remove('is-saved'); }, 1500);
-                showToast('Tersimpan ke Riwayat.');
+                /* Bersihkan draft kalkulator ini lalu refresh halaman supaya form
+                   kembali kosong untuk mendata responden berikutnya. */
+                if (typeof AutoSave !== 'undefined') AutoSave.clear('utp');
+                showToast('Tersimpan ke Riwayat. Memuat ulang halaman untuk data baru\u2026');
+                setTimeout(function () { location.reload(); }, 900);
             });
+
 
             AutoSave.bind('utp', el('form-utp'));
             el("status-lahan-utp").addEventListener("change", toggleForm);
@@ -7868,9 +7872,11 @@
                 });
                 var btn = el('btn-simpan-riwayat-buah');
                 btn.classList.add('is-saved');
-                setTimeout(function () { btn.classList.remove('is-saved'); }, 1500);
-                showToast('Tersimpan ke Riwayat.');
+                if (typeof AutoSave !== 'undefined') AutoSave.clear('buah');
+                showToast('Tersimpan ke Riwayat. Memuat ulang halaman untuk data baru\u2026');
+                setTimeout(function () { location.reload(); }, 900);
             });
+
 
             AutoSave.bind('buah', el('form-buah'));
 
@@ -8160,9 +8166,11 @@
                 });
                 var btn = el('btn-simpan-riwayat-usaha');
                 btn.classList.add('is-saved');
-                setTimeout(function () { btn.classList.remove('is-saved'); }, 1500);
-                showToast('Tersimpan ke Riwayat.');
+                if (typeof AutoSave !== 'undefined') AutoSave.clear('usaha');
+                showToast('Tersimpan ke Riwayat. Memuat ulang halaman untuk data baru\u2026');
+                setTimeout(function () { location.reload(); }, 900);
             });
+
 
             AutoSave.bind('usaha', el('form-usaha'));
 
@@ -8282,9 +8290,11 @@
                 });
                 var btn = el('btn-simpan-riwayat-bgn');
                 btn.classList.add('is-saved');
-                setTimeout(function () { btn.classList.remove('is-saved'); }, 1500);
-                showToast('Tersimpan ke Riwayat.');
+                if (typeof AutoSave !== 'undefined') AutoSave.clear('bgn');
+                showToast('Tersimpan ke Riwayat. Memuat ulang halaman untuk data baru\u2026');
+                setTimeout(function () { location.reload(); }, 900);
             });
+
 
             AutoSave.bind('bgn', el('form-bgn'));
 
@@ -8386,9 +8396,11 @@
                 });
                 var btn = el('btn-simpan-riwayat-tani');
                 btn.classList.add('is-saved');
-                setTimeout(function () { btn.classList.remove('is-saved'); }, 1500);
-                showToast('Tersimpan ke Riwayat.');
+                if (typeof AutoSave !== 'undefined') AutoSave.clear('tani');
+                showToast('Tersimpan ke Riwayat. Memuat ulang halaman untuk data baru\u2026');
+                setTimeout(function () { location.reload(); }, 900);
             });
+
 
             AutoSave.bind('tani', el('form-tani'));
 
