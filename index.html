@@ -4954,6 +4954,12 @@
                             </div>
 
                             <div class="field">
+                                <label class="field-label" for="idpel-sosek">No. IDPEL/No. Meteran</label>
+                                <input type="text" id="idpel-sosek" inputmode="numeric" placeholder="Contoh: 543210123456">
+                                <small class="hint">Bisa dilihat pada meteran listrik atau struk/token PLN terakhir.</small>
+                            </div>
+
+                            <div class="field">
                                 <label class="field-label" for="internet-sosek">Internet per Bulan</label>
                                 <div class="prefix-wrap"><span class="rp">Rp</span><input type="text"
                                         id="internet-sosek" inputmode="numeric" placeholder="Contoh: 100.000"></div>
@@ -5328,6 +5334,10 @@
                             <tr>
                                 <td>Listrik</td>
                                 <td id="out-listrik-sosek">0</td>
+                            </tr>
+                            <tr>
+                                <td>No. IDPEL/No. Meteran</td>
+                                <td id="out-idpel-sosek">-</td>
                             </tr>
                             <tr>
                                 <td>Internet</td>
@@ -5782,7 +5792,7 @@
             }).join('') : '<tr><td colspan="3" class="pd-empty">Belum ada anggota keluarga</td></tr>';
 
             var blok2Rows = usahaList.length ? usahaList.map(function (u, i) {
-                var jenis = instrumenLabel[u.jenisUsaha] || u.jenisUsaha || '-';
+                var jenis = u.jenisUsaha === 'lainnya' ? (u.deskripsiLainnya || 'Usaha/Pekerjaan Lainnya') : (instrumenLabel[u.jenisUsaha] || u.jenisUsaha || '-');
                 var hasilTxt = (u.hasil && u.hasil.bersihBulan != null) ? pdfRp(u.hasil.bersihBulan) : 'Belum dihitung';
                 return '<tr><td>' + (i + 1) + '</td><td>' + pdfEsc(jenis) + '</td><td>' + pdfEsc(namaAnggota(u.pemilikId)) + '</td><td class="num">' + hasilTxt + '</td></tr>';
             }).join('') : '<tr><td colspan="4" class="pd-empty">Belum ada usaha yang didata</td></tr>';
@@ -5829,6 +5839,7 @@
                 '<table><tr><th>Kategori</th><th class="num">Nominal</th></tr>' +
                 '<tr><td>Pangan / Minggu</td><td class="num">' + pdfRp(sosek.panganMinggu) + '</td></tr>' +
                 '<tr><td>Listrik / Bulan</td><td class="num">' + pdfRp(sosek.listrik) + '</td></tr>' +
+                '<tr><td>No. IDPEL/No. Meteran</td><td class="num">' + pdfEsc(sosek.idpel || '-') + '</td></tr>' +
                 '<tr><td>Internet / Bulan</td><td class="num">' + pdfRp(sosek.internet) + '</td></tr>' +
                 '<tr><td>LPG / Bulan</td><td class="num">' + pdfRp(sosek.lpgBulan) + '</td></tr>' +
                 '<tr><td>Bensin / Bulan</td><td class="num">' + pdfRp(sosek.bensinBulan) + '</td></tr>' +
@@ -6153,7 +6164,7 @@
                 var instrumenLabel = (window.LinkKeluarga && window.LinkKeluarga.INSTRUMEN_LABEL) || {};
 
                 var usahaHtml = usahaList.length ? usahaList.map(function (u) {
-                    var jenis = instrumenLabel[u.jenisUsaha] || u.jenisUsaha || 'Usaha';
+                    var jenis = u.jenisUsaha === 'lainnya' ? (u.deskripsiLainnya || 'Usaha/Pekerjaan Lainnya') : (instrumenLabel[u.jenisUsaha] || u.jenisUsaha || 'Usaha');
                     var hasil = (u.hasil && u.hasil.bersihBulan != null)
                         ? (fmtRpDetail(u.hasil.bersihBulan) + '/bln')
                         : 'Belum dihitung';
@@ -6163,6 +6174,7 @@
                 var sosekHtml =
                     '<div class="riwayat-detail-row"><span class="k">Pangan / Minggu</span><span class="v">' + fmtRpDetail(sosek.panganMinggu) + '</span></div>' +
                     '<div class="riwayat-detail-row"><span class="k">Listrik / Bulan</span><span class="v">' + fmtRpDetail(sosek.listrik) + '</span></div>' +
+                    '<div class="riwayat-detail-row"><span class="k">No. IDPEL/Meteran</span><span class="v">' + escapeHtml(sosek.idpel || '-') + '</span></div>' +
                     '<div class="riwayat-detail-row"><span class="k">Internet / Bulan</span><span class="v">' + fmtRpDetail(sosek.internet) + '</span></div>' +
                     '<div class="riwayat-detail-row"><span class="k">Non-Pangan / Bulan</span><span class="v">' + fmtRpDetail(sosek.totalNonPanganBulan) + '</span></div>' +
                     '<div class="riwayat-detail-row"><span class="k">Non-Pangan Rutin / Tahun</span><span class="v">' + fmtRpDetail(sosek.totalRutinTahun) + '</span></div>';
@@ -6950,13 +6962,21 @@
                 Object.keys(LinkKeluarga.INSTRUMEN_LABEL).forEach(function (k) {
                     html += '<option value="' + k + '"' + (k === selected ? ' selected' : '') + '>' + LinkKeluarga.INSTRUMEN_LABEL[k] + '</option>';
                 });
+                html += '<option value="lainnya"' + (selected === 'lainnya' ? ' selected' : '') + '>Usaha/Pekerjaan Lainnya</option>';
                 return html;
             }
 
             function usahaCardHtml(u, idx) {
                 var pemilik = findAnggota(u.pemilikId);
+                var isLainnya = u.jenisUsaha === 'lainnya';
                 var hasilHtml;
-                if (u.hasil && u.hasil.bersihBulan != null) {
+                if (isLainnya) {
+                    hasilHtml =
+                        '<div class="field"><label class="field-label">Sebutkan Usaha/Pekerjaannya</label>' +
+                        '<input type="text" class="kw-u-desk" data-id="' + u.id + '" value="' + escAttrK(u.deskripsiLainnya || '') + '" placeholder="Contoh: Tukang Ojek, Penjahit, Buruh Cuci, dll"></div>' +
+                        '<div class="field"><label class="field-label">Pendapatan Bersih / Bulan</label>' +
+                        '<div class="prefix-wrap"><span class="rp">Rp</span><input type="text" class="kw-u-bersih" data-id="' + u.id + '" inputmode="numeric" value="' + ((u.hasil && u.hasil.bersihBulan) ? formatAngkaTitik(u.hasil.bersihBulan) : '') + '" placeholder="0"></div></div>';
+                } else if (u.hasil && u.hasil.bersihBulan != null) {
                     hasilHtml = '<div class="kw-usaha-hasil-badge">' +
                         '<div class="txt"><span class="l">' + escAttrK(u.hasil.instrumenLabel) + ' &middot; Bersih/Bulan</span><span class="v">' + formatRpK(u.hasil.bersihBulan) + '</span></div>' +
                         '<button type="button" class="btn-outline-sm kw-btn-edit-usaha" data-id="' + u.id + '">Edit Kalkulator</button>' +
@@ -6974,8 +6994,8 @@
                     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m2 0-1 13a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1L6 7"/></svg>' +
                     '</button></div>' +
                     '<div class="kw-usaha-fields">' +
-                    '<div class="field"><label class="field-label">Jenis Usaha</label><select class="kw-u-jenis" data-id="' + u.id + '"' + (u.hasil ? ' disabled' : '') + '>' + jenisUsahaOptionsHtml(u.jenisUsaha) + '</select></div>' +
-                    '<div class="field"><label class="field-label">Pemilik Usaha</label><select class="kw-u-pemilik" data-id="' + u.id + '"' + (u.hasil ? ' disabled' : '') + '>' + pemilikOptionsHtml(u.pemilikId) + '</select></div>' +
+                    '<div class="field"><label class="field-label">Jenis Usaha</label><select class="kw-u-jenis" data-id="' + u.id + '"' + ((u.hasil && !isLainnya) ? ' disabled' : '') + '>' + jenisUsahaOptionsHtml(u.jenisUsaha) + '</select></div>' +
+                    '<div class="field"><label class="field-label">Pemilik Usaha</label><select class="kw-u-pemilik" data-id="' + u.id + '"' + ((u.hasil && !isLainnya) ? ' disabled' : '') + '>' + pemilikOptionsHtml(u.pemilikId) + '</select></div>' +
                     '</div>' +
                     hasilHtml +
                     '</div>';
@@ -6993,6 +7013,25 @@
                 if (!u) return;
                 if (e.target.classList.contains('kw-u-jenis')) { u.jenisUsaha = e.target.value; persist(); renderUsahaList(); }
                 else if (e.target.classList.contains('kw-u-pemilik')) { u.pemilikId = e.target.value; persist(); renderUsahaList(); }
+            });
+
+            usahaListEl.addEventListener('input', function (e) {
+                var id = e.target.getAttribute('data-id');
+                if (!id) return;
+                var u = findUsaha(id);
+                if (!u) return;
+                if (e.target.classList.contains('kw-u-desk')) {
+                    u.deskripsiLainnya = e.target.value;
+                    if (u.hasil) u.hasil.instrumenLabel = u.deskripsiLainnya || 'Usaha/Pekerjaan Lainnya';
+                    persist();
+                } else if (e.target.classList.contains('kw-u-bersih')) {
+                    formatInputRibuan(e.target);
+                    var val = getRawNumber(e.target.value);
+                    if (!u.hasil) u.hasil = { instrumenLabel: u.deskripsiLainnya || 'Usaha/Pekerjaan Lainnya', bersihBulan: 0, terakhirDiisi: null };
+                    u.hasil.bersihBulan = val;
+                    u.hasil.terakhirDiisi = new Date().toISOString();
+                    persist();
+                }
             });
 
             usahaListEl.addEventListener('click', function (e) {
@@ -8593,6 +8632,7 @@
 
                 /* Blok C — Non-Pangan per Bulan */
                 let listrik = getRawNumber(el("listrik-sosek").value);
+                let idpel = el("idpel-sosek").value.trim();
 
                 let lpgHari = getRawNumber(el("lpg-hari-sosek").value);
                 let lpgHarga = getRawNumber(el("lpg-harga-sosek").value);
@@ -8697,6 +8737,7 @@
 
                 /* Blok F — Rincian Non-Pangan Bulanan */
                 el("out-listrik-sosek").innerText = formatRp(listrik);
+                el("out-idpel-sosek").innerText = idpel || "-";
                 el("out-lpg-frek-sosek").innerText = formatFrekuensi(lpgFrek) + " tabung/bulan";
                 el("out-lpg-sosek").innerText = formatRp(lpgBulan);
                 el("out-bensin-frek-sosek").innerText = formatFrekuensi(bensinFrek) + "x isi/bulan";
@@ -8724,7 +8765,7 @@
 
                 lastHasilSosek = {
                     panganHarian: panganHarian, panganMinggu: panganMinggu, panganBulan: panganBulan,
-                    listrik: listrik, lpgBulan: lpgBulan, bensinBulan: bensinBulan,
+                    listrik: listrik, idpel: idpel, lpgBulan: lpgBulan, bensinBulan: bensinBulan,
                     sabunMandiBulan: sabunMandiBulan, sabunCuciBulan: sabunCuciBulan,
                     arisanBulan: arisanBulan, internet: internet, lainnya: lainnya,
                     totalNonPanganBulan: totalNonPanganBulan,
@@ -8947,7 +8988,7 @@
                 if (usahaList.length === 0) lines.push('(Tidak ada usaha tercatat)');
                 usahaList.forEach(function (u, i) {
                     var pemilik = anggota.filter(function (a) { return a.id === u.pemilikId; })[0];
-                    var jenisLabel = LinkKeluarga.INSTRUMEN_LABEL[u.jenisUsaha] || u.jenisUsaha || '(Belum dipilih)';
+                    var jenisLabel = u.jenisUsaha === 'lainnya' ? (u.deskripsiLainnya || 'Usaha/Pekerjaan Lainnya') : (LinkKeluarga.INSTRUMEN_LABEL[u.jenisUsaha] || u.jenisUsaha || '(Belum dipilih)');
                     lines.push((i + 1) + '. ' + jenisLabel + ' \u2014 Pemilik: ' + (pemilik ? (pemilik.nama || '(Tanpa nama)') : '(Belum dipilih)') +
                         (u.hasil && u.hasil.bersihBulan != null ? ' \u2014 Bersih ' + formatRp(u.hasil.bersihBulan) + '/bulan' : ' \u2014 Kalkulator belum diisi'));
                 });
