@@ -707,6 +707,14 @@
             flex: 1 1 200px;
             justify-content: center;
             padding: 11px 14px;
+            white-space: normal;
+            min-width: 0;
+            text-align: center;
+            line-height: 1.35;
+        }
+
+        .btn-result-action svg {
+            flex-shrink: 0;
         }
 
         .btn-simpan-riwayat {
@@ -4954,6 +4962,25 @@
                             </div>
 
                             <div class="field">
+                                <label class="field-label">Daya Listrik Terpasang</label>
+                                <div class="csel">
+                                    <button type="button" class="csel-trigger" aria-haspopup="listbox" aria-expanded="false">
+                                        <span class="csel-value">Pilih daya listrik&hellip;</span>
+                                        <svg class="csel-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9" /></svg>
+                                    </button>
+                                    <ul class="csel-panel" role="listbox" tabindex="-1">
+                                        <li class="csel-opt" role="option" data-value="">Pilih daya listrik&hellip;</li>
+                                        <li class="csel-opt" role="option" data-value="450 VA">450 VA</li>
+                                        <li class="csel-opt" role="option" data-value="900 VA">900 VA</li>
+                                        <li class="csel-opt" role="option" data-value="1300 VA">1300 VA</li>
+                                        <li class="csel-opt" role="option" data-value="2200 VA">2200 VA</li>
+                                        <li class="csel-opt" role="option" data-value="&gt;2200 VA">&gt;2200 VA</li>
+                                    </ul>
+                                    <input type="hidden" id="daya-listrik-sosek" value="">
+                                </div>
+                            </div>
+
+                            <div class="field">
                                 <label class="field-label" for="idpel-sosek">No. IDPEL/No. Meteran</label>
                                 <input type="text" id="idpel-sosek" inputmode="numeric" placeholder="Contoh: 543210123456">
                                 <small class="hint">Bisa dilihat pada meteran listrik atau struk/token PLN terakhir.</small>
@@ -5334,6 +5361,10 @@
                             <tr>
                                 <td>Listrik</td>
                                 <td id="out-listrik-sosek">0</td>
+                            </tr>
+                            <tr>
+                                <td>Daya Listrik Terpasang</td>
+                                <td id="out-daya-listrik-sosek">-</td>
                             </tr>
                             <tr>
                                 <td>No. IDPEL/No. Meteran</td>
@@ -5839,6 +5870,7 @@
                 '<table><tr><th>Kategori</th><th class="num">Nominal</th></tr>' +
                 '<tr><td>Pangan / Minggu</td><td class="num">' + pdfRp(sosek.panganMinggu) + '</td></tr>' +
                 '<tr><td>Listrik / Bulan</td><td class="num">' + pdfRp(sosek.listrik) + '</td></tr>' +
+                '<tr><td>Daya Listrik Terpasang</td><td class="num">' + pdfEsc(sosek.dayaListrik || '-') + '</td></tr>' +
                 '<tr><td>No. IDPEL/No. Meteran</td><td class="num">' + pdfEsc(sosek.idpel || '-') + '</td></tr>' +
                 '<tr><td>Internet / Bulan</td><td class="num">' + pdfRp(sosek.internet) + '</td></tr>' +
                 '<tr><td>LPG / Bulan</td><td class="num">' + pdfRp(sosek.lpgBulan) + '</td></tr>' +
@@ -5879,7 +5911,28 @@
             var target = document.getElementById('print-area');
             if (!target) { showToast('Area cetak tidak ditemukan.'); return; }
             target.innerHTML = html;
-            setTimeout(function () { window.print(); }, 120);
+
+            /* Nama file PDF (Save as PDF) ikut nama Kepala Keluarga, diambil dari
+               judul halaman karena dialog print/"Simpan sebagai PDF" browser
+               memakai document.title sebagai nama file default. */
+            var namaFileKK = (idn.namaKK || '').trim();
+            var namaFileSafe = namaFileKK
+                ? namaFileKK.replace(/[\\/:*?"<>|]+/g, ' ').replace(/\s+/g, ' ').trim()
+                : 'Tanpa Nama';
+            var judulAsli = document.title;
+            document.title = 'SE2026 - Blok 4 - ' + namaFileSafe;
+
+            function pulihkanJudul() {
+                document.title = judulAsli;
+                window.removeEventListener('afterprint', pulihkanJudul);
+            }
+            window.addEventListener('afterprint', pulihkanJudul);
+
+            setTimeout(function () {
+                window.print();
+                /* Cadangan kalau event afterprint tidak terpicu di sebagian WebView/HP */
+                setTimeout(pulihkanJudul, 2000);
+            }, 120);
         };
 
         /* ===================== AUTO-SAVE DRAFT PER HALAMAN ===================== */
@@ -6174,6 +6227,7 @@
                 var sosekHtml =
                     '<div class="riwayat-detail-row"><span class="k">Pangan / Minggu</span><span class="v">' + fmtRpDetail(sosek.panganMinggu) + '</span></div>' +
                     '<div class="riwayat-detail-row"><span class="k">Listrik / Bulan</span><span class="v">' + fmtRpDetail(sosek.listrik) + '</span></div>' +
+                    '<div class="riwayat-detail-row"><span class="k">Daya Listrik</span><span class="v">' + escapeHtml(sosek.dayaListrik || '-') + '</span></div>' +
                     '<div class="riwayat-detail-row"><span class="k">No. IDPEL/Meteran</span><span class="v">' + escapeHtml(sosek.idpel || '-') + '</span></div>' +
                     '<div class="riwayat-detail-row"><span class="k">Internet / Bulan</span><span class="v">' + fmtRpDetail(sosek.internet) + '</span></div>' +
                     '<div class="riwayat-detail-row"><span class="k">Non-Pangan / Bulan</span><span class="v">' + fmtRpDetail(sosek.totalNonPanganBulan) + '</span></div>' +
@@ -8632,6 +8686,7 @@
 
                 /* Blok C — Non-Pangan per Bulan */
                 let listrik = getRawNumber(el("listrik-sosek").value);
+                let dayaListrik = el("daya-listrik-sosek").value;
                 let idpel = el("idpel-sosek").value.trim();
 
                 let lpgHari = getRawNumber(el("lpg-hari-sosek").value);
@@ -8737,6 +8792,7 @@
 
                 /* Blok F — Rincian Non-Pangan Bulanan */
                 el("out-listrik-sosek").innerText = formatRp(listrik);
+                el("out-daya-listrik-sosek").innerText = dayaListrik || "-";
                 el("out-idpel-sosek").innerText = idpel || "-";
                 el("out-lpg-frek-sosek").innerText = formatFrekuensi(lpgFrek) + " tabung/bulan";
                 el("out-lpg-sosek").innerText = formatRp(lpgBulan);
@@ -8765,7 +8821,7 @@
 
                 lastHasilSosek = {
                     panganHarian: panganHarian, panganMinggu: panganMinggu, panganBulan: panganBulan,
-                    listrik: listrik, idpel: idpel, lpgBulan: lpgBulan, bensinBulan: bensinBulan,
+                    listrik: listrik, dayaListrik: dayaListrik, idpel: idpel, lpgBulan: lpgBulan, bensinBulan: bensinBulan,
                     sabunMandiBulan: sabunMandiBulan, sabunCuciBulan: sabunCuciBulan,
                     arisanBulan: arisanBulan, internet: internet, lainnya: lainnya,
                     totalNonPanganBulan: totalNonPanganBulan,
