@@ -819,19 +819,76 @@
 
         .riwayat-detail {
             display: none;
-            margin-top: 10px;
-            padding: 10px 12px;
+            margin-top: 12px;
+            padding: 14px 16px;
             background: var(--surface-alt);
-            border-radius: 8px;
-            font-family: var(--font-mono, monospace);
-            font-size: 11.5px;
-            white-space: pre-wrap;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            font-size: 12.5px;
             color: var(--ink-soft);
-            line-height: 1.6;
+            line-height: 1.5;
         }
 
         .riwayat-detail.show {
             display: block;
+            animation: fadein .25s ease;
+        }
+
+        .riwayat-detail-section {
+            margin-bottom: 16px;
+        }
+
+        .riwayat-detail-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .riwayat-detail-section h4 {
+            margin: 0 0 8px;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: .04em;
+            text-transform: uppercase;
+            color: var(--accent-deep, var(--ink-faint));
+            padding-bottom: 6px;
+            border-bottom: 1.5px solid var(--line);
+        }
+
+        .riwayat-detail-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 6px 0;
+            border-bottom: 1px dashed var(--line-soft, var(--line));
+            font-size: 12.5px;
+        }
+
+        .riwayat-detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .riwayat-detail-row .v {
+            font-family: var(--font-mono, monospace);
+            font-weight: 700;
+            color: var(--ink);
+            text-align: right;
+            flex: 0 0 auto;
+        }
+
+        .riwayat-detail-row .k {
+            color: var(--ink-soft);
+        }
+
+        .riwayat-detail-empty {
+            margin: 0;
+            font-size: 12px;
+            color: var(--ink-faint);
+            font-style: italic;
+        }
+
+        .riwayat-detail-plain {
+            font-family: var(--font-mono, monospace);
+            white-space: pre-wrap;
+            font-size: 11.5px;
         }
 
         @media (max-width: 600px) {
@@ -1869,6 +1926,82 @@
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
             gap: 8px;
+        }
+
+        .segmented-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .kondisi-card {
+            border: 1.5px solid var(--line);
+            border-radius: var(--radius-md, 12px);
+            padding: 14px 16px;
+            margin-bottom: 14px;
+            background: var(--surface-alt);
+        }
+
+        .kondisi-card .field-label.title {
+            font-size: 13.5px;
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .kondisi-card .sub-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--ink-faint);
+            text-transform: uppercase;
+            letter-spacing: .03em;
+            margin: 12px 0 7px;
+        }
+
+        .kondisi-card .sub-label:first-of-type {
+            margin-top: 0;
+        }
+
+        .aset-checklist {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .aset-checklist label {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            font-size: 13px;
+            color: var(--ink-soft);
+            padding: 9px 11px;
+            border: 1.5px solid var(--line);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: .15s;
+        }
+
+        .aset-checklist label:has(input:checked) {
+            border-color: var(--accent);
+            background: var(--accent-soft);
+            color: var(--accent-deep);
+            font-weight: 600;
+        }
+
+        .aset-checklist input {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--accent);
+            flex: 0 0 auto;
+        }
+
+        @media (max-width: 640px) {
+            .segmented-4 {
+                grid-template-columns: 1fr 1fr;
+            }
         }
 
         .seg-opt {
@@ -3073,10 +3206,130 @@
                 font-size: 25px;
             }
         }
+        /* ===== Ekspor PDF (cetak browser) ===== */
+        #print-area {
+            display: none;
+        }
+
+        @media print {
+            .app-shell {
+                display: none !important;
+            }
+
+            #print-area {
+                display: block !important;
+            }
+
+            @page {
+                size: A4;
+                margin: 14mm 12mm;
+            }
+        }
+
+        #print-area .pd-wrap {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            color: #16232c;
+            max-width: 190mm;
+            margin: 0 auto;
+        }
+
+        #print-area .pd-header {
+            border-bottom: 2.5px solid #16232c;
+            padding-bottom: 10px;
+            margin-bottom: 18px;
+        }
+
+        #print-area .pd-eyebrow {
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            color: #55666f;
+        }
+
+        #print-area .pd-header h1 {
+            font-size: 18px;
+            margin: 4px 0 8px;
+        }
+
+        #print-area .pd-meta {
+            font-size: 11px;
+            color: #333;
+            line-height: 1.7;
+        }
+
+        #print-area .pd-blok {
+            margin-bottom: 20px;
+            page-break-inside: avoid;
+        }
+
+        #print-area .pd-blok h2 {
+            font-size: 12.5px;
+            text-transform: uppercase;
+            letter-spacing: .03em;
+            background: #eef2f1;
+            padding: 6px 10px;
+            margin: 0 0 8px;
+            border-left: 4px solid #16232c;
+        }
+
+        #print-area .pd-blok h3 {
+            font-size: 11.5px;
+            margin: 14px 0 6px;
+            color: #333;
+        }
+
+        #print-area table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 10.5px;
+            margin-bottom: 4px;
+        }
+
+        #print-area th,
+        #print-area td {
+            border: 1px solid #ccc;
+            padding: 5px 7px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        #print-area th {
+            background: #f7f7f7;
+            font-weight: 700;
+        }
+
+        #print-area td.num,
+        #print-area th.num {
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+        }
+
+        #print-area .pd-total-row td {
+            font-weight: 700;
+            background: #f2f4f3;
+        }
+
+        #print-area .pd-footer {
+            margin-top: 24px;
+            font-size: 9.5px;
+            color: #888;
+            text-align: center;
+            border-top: 1px solid #ccc;
+            padding-top: 8px;
+        }
+
+        #print-area .pd-empty {
+            text-align: center;
+            color: #888;
+            font-style: italic;
+        }
     </style>
 </head>
 
 <body>
+
+    <div id="print-area"></div>
 
     <div class="app-shell" id="app-shell">
 
@@ -3284,6 +3537,10 @@
                                     <label class="field-label" for="kw-nourut">No. Urut Bangunan</label>
                                     <input type="text" id="kw-nourut" placeholder="Contoh: 001-B">
                                 </div>
+                            </div>
+                            <div class="field">
+                                <label class="field-label" for="kw-nowa">No. WhatsApp / HP</label>
+                                <input type="text" id="kw-nowa" inputmode="tel" placeholder="Contoh: 0812-3456-7890">
                             </div>
                         </fieldset>
                         <div class="kw-nav-buttons" style="justify-content:flex-end;">
@@ -4848,6 +5105,129 @@
                             </div>
                         </fieldset>
 
+                        <fieldset>
+                            <div class="blok-label"><span class="dot"></span>Blok F &mdash; Kondisi Perumahan</div>
+                            <small class="hint" style="display:block;margin-bottom:14px;">Untuk tiap komponen, pilih
+                                bahan bangunan utama terlebih dahulu, baru kondisinya saat ini.</small>
+
+                            <div class="kondisi-card">
+                                <div class="field-label title">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><path d="M3 20h18M4 20V9l8-6 8 6v11"/></svg>
+                                    Lantai
+                                </div>
+                                <div class="sub-label">Bahan Utama</div>
+                                <div class="csel">
+                                    <button type="button" class="csel-trigger" aria-haspopup="listbox" aria-expanded="false">
+                                        <span class="csel-value">Pilih bahan lantai&hellip;</span>
+                                        <svg class="csel-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9" /></svg>
+                                    </button>
+                                    <ul class="csel-panel" role="listbox" tabindex="-1">
+                                        <li class="csel-opt" role="option" data-value="">Pilih bahan lantai&hellip;</li>
+                                        <li class="csel-opt" role="option" data-value="Marmer/Granit">Marmer / Granit</li>
+                                        <li class="csel-opt" role="option" data-value="Keramik">Keramik</li>
+                                        <li class="csel-opt" role="option" data-value="Vinil/Karpet">Vinil / Karpet</li>
+                                        <li class="csel-opt" role="option" data-value="Ubin/Tegel">Ubin / Tegel</li>
+                                        <li class="csel-opt" role="option" data-value="Kayu/Papan">Kayu / Papan</li>
+                                        <li class="csel-opt" role="option" data-value="Semen">Semen</li>
+                                        <li class="csel-opt" role="option" data-value="Bambu">Bambu</li>
+                                        <li class="csel-opt" role="option" data-value="Tanah">Tanah</li>
+                                        <li class="csel-opt" role="option" data-value="Lainnya">Lainnya</li>
+                                    </ul>
+                                    <input type="hidden" id="lantai-bahan-sosek" value="">
+                                </div>
+                                <div class="sub-label">Kondisi Saat Ini</div>
+                                <div class="segmented-4" id="lantai-kondisi-sosek">
+                                    <label class="seg-opt"><input type="radio" name="lantai_kondisi_sosek" value="Baik"><span>Baik</span></label>
+                                    <label class="seg-opt"><input type="radio" name="lantai_kondisi_sosek" value="Rusak Ringan"><span>Rusak Ringan</span></label>
+                                    <label class="seg-opt"><input type="radio" name="lantai_kondisi_sosek" value="Rusak Sedang"><span>Rusak Sedang</span></label>
+                                    <label class="seg-opt"><input type="radio" name="lantai_kondisi_sosek" value="Rusak Berat"><span>Rusak Berat</span></label>
+                                </div>
+                            </div>
+
+                            <div class="kondisi-card">
+                                <div class="field-label title">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><rect x="3" y="4" width="18" height="16" rx="1"/><path d="M3 10h18M9 4v16"/></svg>
+                                    Dinding
+                                </div>
+                                <div class="sub-label">Bahan Utama</div>
+                                <div class="csel">
+                                    <button type="button" class="csel-trigger" aria-haspopup="listbox" aria-expanded="false">
+                                        <span class="csel-value">Pilih bahan dinding&hellip;</span>
+                                        <svg class="csel-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9" /></svg>
+                                    </button>
+                                    <ul class="csel-panel" role="listbox" tabindex="-1">
+                                        <li class="csel-opt" role="option" data-value="">Pilih bahan dinding&hellip;</li>
+                                        <li class="csel-opt" role="option" data-value="Tembok">Tembok</li>
+                                        <li class="csel-opt" role="option" data-value="Plesteran Anyaman Bambu/Kawat">Plesteran Anyaman Bambu / Kawat</li>
+                                        <li class="csel-opt" role="option" data-value="Kayu/Papan/GRC">Kayu / Papan / GRC</li>
+                                        <li class="csel-opt" role="option" data-value="Anyaman Bambu">Anyaman Bambu</li>
+                                        <li class="csel-opt" role="option" data-value="Bambu">Bambu</li>
+                                        <li class="csel-opt" role="option" data-value="Lainnya">Lainnya</li>
+                                    </ul>
+                                    <input type="hidden" id="dinding-bahan-sosek" value="">
+                                </div>
+                                <div class="sub-label">Kondisi Saat Ini</div>
+                                <div class="segmented-4" id="dinding-kondisi-sosek">
+                                    <label class="seg-opt"><input type="radio" name="dinding_kondisi_sosek" value="Baik"><span>Baik</span></label>
+                                    <label class="seg-opt"><input type="radio" name="dinding_kondisi_sosek" value="Rusak Ringan"><span>Rusak Ringan</span></label>
+                                    <label class="seg-opt"><input type="radio" name="dinding_kondisi_sosek" value="Rusak Sedang"><span>Rusak Sedang</span></label>
+                                    <label class="seg-opt"><input type="radio" name="dinding_kondisi_sosek" value="Rusak Berat"><span>Rusak Berat</span></label>
+                                </div>
+                            </div>
+
+                            <div class="kondisi-card">
+                                <div class="field-label title">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/></svg>
+                                    Atap
+                                </div>
+                                <div class="sub-label">Bahan Utama</div>
+                                <div class="csel">
+                                    <button type="button" class="csel-trigger" aria-haspopup="listbox" aria-expanded="false">
+                                        <span class="csel-value">Pilih bahan atap&hellip;</span>
+                                        <svg class="csel-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9" /></svg>
+                                    </button>
+                                    <ul class="csel-panel" role="listbox" tabindex="-1">
+                                        <li class="csel-opt" role="option" data-value="">Pilih bahan atap&hellip;</li>
+                                        <li class="csel-opt" role="option" data-value="Beton">Beton</li>
+                                        <li class="csel-opt" role="option" data-value="Genteng">Genteng</li>
+                                        <li class="csel-opt" role="option" data-value="Seng">Seng</li>
+                                        <li class="csel-opt" role="option" data-value="Asbes">Asbes</li>
+                                        <li class="csel-opt" role="option" data-value="Bambu">Bambu</li>
+                                        <li class="csel-opt" role="option" data-value="Kayu/Sirap">Kayu / Sirap</li>
+                                        <li class="csel-opt" role="option" data-value="Jerami/Ijuk/Rumbia">Jerami / Ijuk / Rumbia</li>
+                                        <li class="csel-opt" role="option" data-value="Lainnya">Lainnya</li>
+                                    </ul>
+                                    <input type="hidden" id="atap-bahan-sosek" value="">
+                                </div>
+                                <div class="sub-label">Kondisi Saat Ini</div>
+                                <div class="segmented-4" id="atap-kondisi-sosek">
+                                    <label class="seg-opt"><input type="radio" name="atap_kondisi_sosek" value="Baik"><span>Baik</span></label>
+                                    <label class="seg-opt"><input type="radio" name="atap_kondisi_sosek" value="Rusak Ringan"><span>Rusak Ringan</span></label>
+                                    <label class="seg-opt"><input type="radio" name="atap_kondisi_sosek" value="Rusak Sedang"><span>Rusak Sedang</span></label>
+                                    <label class="seg-opt"><input type="radio" name="atap_kondisi_sosek" value="Rusak Berat"><span>Rusak Berat</span></label>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <fieldset>
+                            <div class="blok-label"><span class="dot"></span>Blok G &mdash; Kepemilikan Aset Lainnya</div>
+                            <div class="field">
+                                <label class="field-label">Aset Bergerak (di luar kendaraan pada Blok E)</label>
+                                <div class="aset-checklist" id="aset-bergerak-sosek">
+                                    <label><input type="checkbox" class="aset-bergerak-chk" name="aset_bergerak_sosek" value="Emas/Perhiasan"> Emas / Perhiasan</label>
+                                    <label><input type="checkbox" class="aset-bergerak-chk" name="aset_bergerak_sosek" value="Elektronik Utama (TV/Kulkas/Mesin Cuci)"> Elektronik Utama (TV / Kulkas / Mesin Cuci)</label>
+                                    <label><input type="checkbox" class="aset-bergerak-chk" name="aset_bergerak_sosek" value="Ternak"> Ternak (Ayam / Kambing / Sapi, dll)</label>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label class="field-label">Aset Tidak Bergerak</label>
+                                <div class="aset-checklist" id="aset-tidak-bergerak-sosek">
+                                    <label><input type="checkbox" class="aset-tidak-bergerak-chk" name="aset_tidak_bergerak_sosek" value="Tanah/Sawah/Kebun"> Tanah / Sawah / Kebun</label>
+                                    <label><input type="checkbox" class="aset-tidak-bergerak-chk" name="aset_tidak_bergerak_sosek" value="Rumah/Bangunan Lain"> Rumah / Bangunan Lain (selain tempat tinggal)</label>
+                                </div>
+                            </div>
+                        </fieldset>
+
                         <button type="button" class="btn-hitung" id="btn-hitung-sosek">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round">
@@ -5021,6 +5401,10 @@
                             <button type="button" class="btn-outline-sm btn-result-action" id="btn-ringkasan-lengkap-sosek">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="1.5"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
                                 Salin Ringkasan Lengkap (Blok 1&ndash;4)
+                            </button>
+                            <button type="button" class="btn-outline-sm btn-result-action" id="btn-pdf-sosek">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h9l5 5v15H6z"/><path d="M15 2v5h5"/><path d="M9 13h6M9 17h6"/></svg>
+                                Ekspor PDF (Blok 1&ndash;4)
                             </button>
                             <button type="button" class="btn-outline-sm btn-result-action btn-simpan-riwayat" id="btn-simpan-riwayat-sosek" style="flex-basis:100%;">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg>
@@ -5372,6 +5756,121 @@
             document.addEventListener('keydown', handleKey);
         }
 
+        /* ===================== EKSPOR PDF (CETAK) KUESIONER KELUARGA ===================== */
+        function pdfEsc(s) {
+            return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+            });
+        }
+        function pdfRp(n) { return 'Rp ' + Math.round(n || 0).toLocaleString('id-ID'); }
+
+        window.cetakPdfKeluarga = function (entry) {
+            var kd = entry.snapshotKeluarga || {};
+            var sosek = entry.snapshotSosek || {};
+            var idn = kd.identitas || {};
+            var anggota = kd.anggota || [];
+            var usahaList = kd.usahaList || [];
+            var instrumenLabel = (window.LinkKeluarga && window.LinkKeluarga.INSTRUMEN_LABEL) || {};
+
+            function namaAnggota(id) {
+                var a = anggota.filter(function (x) { return x.id === id; })[0];
+                return a ? (a.nama || '(Tanpa nama)') : '-';
+            }
+
+            var blok1Rows = anggota.length ? anggota.map(function (a, i) {
+                return '<tr><td>' + (i + 1) + '</td><td>' + pdfEsc(a.nama || '-') + '</td><td>' + pdfEsc(a.pendidikan || '-') + '</td></tr>';
+            }).join('') : '<tr><td colspan="3" class="pd-empty">Belum ada anggota keluarga</td></tr>';
+
+            var blok2Rows = usahaList.length ? usahaList.map(function (u, i) {
+                var jenis = instrumenLabel[u.jenisUsaha] || u.jenisUsaha || '-';
+                var hasilTxt = (u.hasil && u.hasil.bersihBulan != null) ? pdfRp(u.hasil.bersihBulan) : 'Belum dihitung';
+                return '<tr><td>' + (i + 1) + '</td><td>' + pdfEsc(jenis) + '</td><td>' + pdfEsc(namaAnggota(u.pemilikId)) + '</td><td class="num">' + hasilTxt + '</td></tr>';
+            }).join('') : '<tr><td colspan="4" class="pd-empty">Belum ada usaha yang didata</td></tr>';
+
+            var totalKeluarga = 0;
+            var blok3Rows = anggota.length ? anggota.map(function (a, i) {
+                var gaji = a.adaGaji ? (a.pendapatanUpah || 0) : 0;
+                var usahaTotal = usahaList.filter(function (u) { return u.pemilikId === a.id; })
+                    .reduce(function (s, u) { return s + ((u.hasil && u.hasil.bersihBulan) || 0); }, 0);
+                var lainnya = a.adaLainnya ? (a.pendapatanLainnya || 0) : 0;
+                var total = gaji + usahaTotal + lainnya;
+                totalKeluarga += total;
+                return '<tr><td>' + (i + 1) + '</td><td>' + pdfEsc(a.nama || '-') + '</td><td class="num">' + pdfRp(gaji) + '</td><td class="num">' + pdfRp(usahaTotal) + '</td><td class="num">' + pdfRp(lainnya) + '</td><td class="num"><b>' + pdfRp(total) + '</b></td></tr>';
+            }).join('') : '<tr><td colspan="6" class="pd-empty">-</td></tr>';
+
+            var per = sosek.perumahan || {};
+            var asetBergerakTxt = (sosek.asetBergerak || []).join(', ') || '-';
+            var asetTidakTxt = (sosek.asetTidakBergerak || []).join(', ') || '-';
+
+            var html = '' +
+                '<div class="pd-wrap">' +
+                '<div class="pd-header">' +
+                '<div class="pd-eyebrow">Sensus Ekonomi 2026</div>' +
+                '<h1>Kuesioner Keluarga Terpadu</h1>' +
+                '<div class="pd-meta">' +
+                'Nama Kepala Keluarga: <b>' + pdfEsc(idn.namaKK || '-') + '</b><br>' +
+                'SLS/RT: <b>' + pdfEsc(idn.sls || '-') + '</b> &nbsp;&middot;&nbsp; No. Urut Bangunan: <b>' + pdfEsc(idn.noUrut || '-') + '</b> &nbsp;&middot;&nbsp; No. WA/HP: <b>' + pdfEsc(idn.noWa || '-') + '</b><br>' +
+                'Dicetak: ' + new Date().toLocaleString('id-ID') +
+                '</div></div>' +
+
+                '<div class="pd-blok"><h2>Blok 1 &mdash; Anggota Keluarga</h2>' +
+                '<table><tr><th>No</th><th>Nama</th><th>Pendidikan Terakhir</th></tr>' + blok1Rows + '</table></div>' +
+
+                '<div class="pd-blok"><h2>Blok 2 &mdash; Keterangan Usaha</h2>' +
+                '<table><tr><th>No</th><th>Jenis Usaha</th><th>Pemilik</th><th class="num">Bersih / Bulan</th></tr>' + blok2Rows + '</table></div>' +
+
+                '<div class="pd-blok"><h2>Blok 3 &mdash; Pendapatan Anggota Keluarga</h2>' +
+                '<table><tr><th>No</th><th>Nama</th><th class="num">Gaji/Upah</th><th class="num">Usaha</th><th class="num">Lainnya</th><th class="num">Total</th></tr>' +
+                blok3Rows +
+                '<tr class="pd-total-row"><td colspan="5">TOTAL PENDAPATAN KELUARGA / BULAN</td><td class="num">' + pdfRp(totalKeluarga) + '</td></tr>' +
+                '</table></div>' +
+
+                '<div class="pd-blok"><h2>Blok 4 &mdash; Sosial Ekonomi Rumah Tangga</h2>' +
+                '<table><tr><th>Kategori</th><th class="num">Nominal</th></tr>' +
+                '<tr><td>Pangan / Minggu</td><td class="num">' + pdfRp(sosek.panganMinggu) + '</td></tr>' +
+                '<tr><td>Listrik / Bulan</td><td class="num">' + pdfRp(sosek.listrik) + '</td></tr>' +
+                '<tr><td>Internet / Bulan</td><td class="num">' + pdfRp(sosek.internet) + '</td></tr>' +
+                '<tr><td>LPG / Bulan</td><td class="num">' + pdfRp(sosek.lpgBulan) + '</td></tr>' +
+                '<tr><td>Bensin / Bulan</td><td class="num">' + pdfRp(sosek.bensinBulan) + '</td></tr>' +
+                '<tr><td>Sabun Mandi / Bulan</td><td class="num">' + pdfRp(sosek.sabunMandiBulan) + '</td></tr>' +
+                '<tr><td>Sabun Cuci / Bulan</td><td class="num">' + pdfRp(sosek.sabunCuciBulan) + '</td></tr>' +
+                '<tr><td>Arisan / Bulan</td><td class="num">' + pdfRp(sosek.arisanBulan) + '</td></tr>' +
+                '<tr><td>Lainnya / Bulan</td><td class="num">' + pdfRp(sosek.lainnya) + '</td></tr>' +
+                '<tr class="pd-total-row"><td>Total Non-Pangan / Bulan</td><td class="num">' + pdfRp(sosek.totalNonPanganBulan) + '</td></tr>' +
+                '<tr><td>Pajak Kendaraan / Tahun</td><td class="num">' + pdfRp(sosek.pajakKendaraan) + '</td></tr>' +
+                '<tr><td>Pajak Rumah (PBB) / Tahun</td><td class="num">' + pdfRp(sosek.pajakRumah) + '</td></tr>' +
+                '<tr><td>Hari Raya / Tahun</td><td class="num">' + pdfRp(sosek.hariRaya) + '</td></tr>' +
+                '<tr><td>Pendidikan (UKT dkk) / Tahun</td><td class="num">' + pdfRp(sosek.uktTahun) + '</td></tr>' +
+                '<tr class="pd-total-row"><td>Total Non-Pangan Rutin / Tahun</td><td class="num">' + pdfRp(sosek.totalRutinTahun) + '</td></tr>' +
+                '<tr class="pd-total-row"><td>Total Pengeluaran / Bulan</td><td class="num">' + pdfRp(sosek.totalPengeluaranBulan) + '</td></tr>' +
+                '<tr class="pd-total-row"><td>Selisih Pendapatan &minus; Pengeluaran / Bulan</td><td class="num">' + pdfRp(sosek.selisihBulan) + '</td></tr>' +
+                '</table>' +
+
+                '<h3>Kondisi Perumahan</h3>' +
+                '<table><tr><th>Komponen</th><th>Bahan Utama</th><th>Kondisi</th></tr>' +
+                '<tr><td>Lantai</td><td>' + pdfEsc(per.lantaiBahan || '-') + '</td><td>' + pdfEsc(per.lantaiKondisi || '-') + '</td></tr>' +
+                '<tr><td>Dinding</td><td>' + pdfEsc(per.dindingBahan || '-') + '</td><td>' + pdfEsc(per.dindingKondisi || '-') + '</td></tr>' +
+                '<tr><td>Atap</td><td>' + pdfEsc(per.atapBahan || '-') + '</td><td>' + pdfEsc(per.atapKondisi || '-') + '</td></tr>' +
+                '</table>' +
+
+                '<h3>Kepemilikan Aset</h3>' +
+                '<table><tr><th>Kategori</th><th>Keterangan</th></tr>' +
+                '<tr><td>Sepeda Motor</td><td>' + ((sosek.motorList || []).length ? (sosek.motorList.length + ' unit') : 'Tidak ada') + '</td></tr>' +
+                '<tr><td>Mobil</td><td>' + ((sosek.mobilList || []).length ? (sosek.mobilList.length + ' unit') : 'Tidak ada') + '</td></tr>' +
+                '<tr><td>Aset Bergerak Lainnya</td><td>' + pdfEsc(asetBergerakTxt) + '</td></tr>' +
+                '<tr><td>Aset Tidak Bergerak</td><td>' + pdfEsc(asetTidakTxt) + '</td></tr>' +
+                '</table>' +
+                '</div>' +
+
+                '<div class="pd-footer">Dokumen ini dihasilkan otomatis oleh Dasbor Instrumen Enumerator SE2026.</div>' +
+                '</div>';
+
+            var target = document.getElementById('print-area');
+            if (!target) { showToast('Area cetak tidak ditemukan.'); return; }
+            target.innerHTML = html;
+            setTimeout(function () { window.print(); }, 120);
+        };
+
         /* ===================== AUTO-SAVE DRAFT PER HALAMAN ===================== */
         /* Menyimpan isian form ke localStorage supaya tidak hilang kalau halaman
            ter-reload/HP mati mendadak di tengah wawancara. Field ditemukan otomatis
@@ -5392,6 +5891,11 @@
                 formEl.querySelectorAll('input[type="radio"][name]').forEach(function (r) { names[r.name] = true; });
                 return Object.keys(names);
             }
+            function checkboxGroupsOf(formEl) {
+                var names = {};
+                formEl.querySelectorAll('input[type="checkbox"][name]').forEach(function (c) { names[c.name] = true; });
+                return Object.keys(names);
+            }
 
             function save(moduleId, formEl) {
                 try {
@@ -5403,6 +5907,10 @@
                     radioGroupsOf(formEl).forEach(function (name) {
                         var checked = formEl.querySelector('input[name="' + name + '"]:checked');
                         if (checked) data['__radio__' + name] = checked.value;
+                    });
+                    checkboxGroupsOf(formEl).forEach(function (name) {
+                        var checked = formEl.querySelectorAll('input[name="' + name + '"]:checked');
+                        data['__checkbox__' + name] = Array.prototype.map.call(checked, function (c) { return c.value; });
                     });
                     localStorage.setItem(draftKey(moduleId), JSON.stringify(data));
                     var indEl = document.getElementById('draft-indicator-' + moduleId);
@@ -5448,6 +5956,14 @@
                         if (r) { r.checked = true; r.dispatchEvent(new Event('change')); }
                     });
 
+                    checkboxGroupsOf(formEl).forEach(function (name) {
+                        var vals = data['__checkbox__' + name];
+                        if (!vals) return;
+                        formEl.querySelectorAll('input[name="' + name + '"]').forEach(function (c) {
+                            c.checked = vals.indexOf(c.value) !== -1;
+                        });
+                    });
+
                     return true;
                 } catch (e) { return false; }
             }
@@ -5472,6 +5988,11 @@
                 radioGroupsOf(formEl).forEach(function (name) {
                     formEl.querySelectorAll('input[name="' + name + '"]').forEach(function (r) {
                         r.addEventListener('change', scheduleSave);
+                    });
+                });
+                checkboxGroupsOf(formEl).forEach(function (name) {
+                    formEl.querySelectorAll('input[name="' + name + '"]').forEach(function (c) {
+                        c.addEventListener('change', scheduleSave);
                     });
                 });
             }
@@ -5511,6 +6032,21 @@
                 persist(list);
                 updateNavBadge();
                 return entry;
+            }
+            function update(id, patch) {
+                var list = all();
+                var idx = -1;
+                for (var i = 0; i < list.length; i++) { if (list[i].id === id) { idx = i; break; } }
+                if (idx === -1) return false;
+                patch.id = id;
+                patch.waktu = new Date().toISOString();
+                patch.waktuDibuat = list[idx].waktuDibuat || list[idx].waktu;
+                list[idx] = patch;
+                persist(list);
+                return true;
+            }
+            function getById(id) {
+                return all().filter(function (e) { return e.id === id; })[0] || null;
             }
             function remove(id) {
                 persist(all().filter(function (e) { return e.id !== id; }));
@@ -5599,6 +6135,62 @@
                 }
             }
 
+            function fmtRpDetail(n) { return 'Rp ' + Math.round(n || 0).toLocaleString('id-ID'); }
+
+            function buildDetailHtml(e) {
+                if (e.modul !== 'keluarga' || !e.snapshotKeluarga) {
+                    return '<div class="riwayat-detail-plain">' + escapeHtml(e.ringkasan || '') + '</div>';
+                }
+                var kd = e.snapshotKeluarga || {};
+                var sosek = e.snapshotSosek || {};
+                var anggota = kd.anggota || [];
+                var usahaList = kd.usahaList || [];
+
+                function namaAnggota(id) {
+                    var a = anggota.filter(function (x) { return x.id === id; })[0];
+                    return a ? (a.nama || '(Tanpa nama)') : '(Pemilik belum dipilih)';
+                }
+                var instrumenLabel = (window.LinkKeluarga && window.LinkKeluarga.INSTRUMEN_LABEL) || {};
+
+                var usahaHtml = usahaList.length ? usahaList.map(function (u) {
+                    var jenis = instrumenLabel[u.jenisUsaha] || u.jenisUsaha || 'Usaha';
+                    var hasil = (u.hasil && u.hasil.bersihBulan != null)
+                        ? (fmtRpDetail(u.hasil.bersihBulan) + '/bln')
+                        : 'Belum dihitung';
+                    return '<div class="riwayat-detail-row"><span class="k">' + escapeHtml(jenis) + ' &middot; ' + escapeHtml(namaAnggota(u.pemilikId)) + '</span><span class="v">' + hasil + '</span></div>';
+                }).join('') : '<p class="riwayat-detail-empty">Belum ada usaha yang didata.</p>';
+
+                var sosekHtml =
+                    '<div class="riwayat-detail-row"><span class="k">Pangan / Minggu</span><span class="v">' + fmtRpDetail(sosek.panganMinggu) + '</span></div>' +
+                    '<div class="riwayat-detail-row"><span class="k">Listrik / Bulan</span><span class="v">' + fmtRpDetail(sosek.listrik) + '</span></div>' +
+                    '<div class="riwayat-detail-row"><span class="k">Internet / Bulan</span><span class="v">' + fmtRpDetail(sosek.internet) + '</span></div>' +
+                    '<div class="riwayat-detail-row"><span class="k">Non-Pangan / Bulan</span><span class="v">' + fmtRpDetail(sosek.totalNonPanganBulan) + '</span></div>' +
+                    '<div class="riwayat-detail-row"><span class="k">Non-Pangan Rutin / Tahun</span><span class="v">' + fmtRpDetail(sosek.totalRutinTahun) + '</span></div>';
+
+                var per = sosek.perumahan || {};
+                var perumahanHtml = (per.lantaiBahan || per.dindingBahan || per.atapBahan) ?
+                    '<div class="riwayat-detail-row"><span class="k">Lantai</span><span class="v">' + escapeHtml(per.lantaiBahan || '-') + (per.lantaiKondisi ? ' (' + escapeHtml(per.lantaiKondisi) + ')' : '') + '</span></div>' +
+                    '<div class="riwayat-detail-row"><span class="k">Dinding</span><span class="v">' + escapeHtml(per.dindingBahan || '-') + (per.dindingKondisi ? ' (' + escapeHtml(per.dindingKondisi) + ')' : '') + '</span></div>' +
+                    '<div class="riwayat-detail-row"><span class="k">Atap</span><span class="v">' + escapeHtml(per.atapBahan || '-') + (per.atapKondisi ? ' (' + escapeHtml(per.atapKondisi) + ')' : '') + '</span></div>'
+                    : '<p class="riwayat-detail-empty">Kondisi perumahan belum didata.</p>';
+
+                var asetBergerak = (sosek.asetBergerak && sosek.asetBergerak.length) ? sosek.asetBergerak.join(', ') : '-';
+                var asetTidak = (sosek.asetTidakBergerak && sosek.asetTidakBergerak.length) ? sosek.asetTidakBergerak.join(', ') : '-';
+                var motorN = (sosek.motorList || []).length, mobilN = (sosek.mobilList || []).length;
+                var asetKendaraanHtml = (motorN || mobilN)
+                    ? '<div class="riwayat-detail-row"><span class="k">Kendaraan</span><span class="v">' + (motorN ? motorN + ' motor' : '') + ((motorN && mobilN) ? ', ' : '') + (mobilN ? mobilN + ' mobil' : '') + '</span></div>'
+                    : '';
+
+                return '' +
+                    '<div class="riwayat-detail-section"><h4>Usaha &amp; Pengelola</h4>' + usahaHtml + '</div>' +
+                    '<div class="riwayat-detail-section"><h4>Sosial Ekonomi (Highlight)</h4>' + sosekHtml + '</div>' +
+                    '<div class="riwayat-detail-section"><h4>Kondisi Perumahan</h4>' + perumahanHtml + '</div>' +
+                    '<div class="riwayat-detail-section"><h4>Kepemilikan Aset</h4>' + asetKendaraanHtml +
+                    '<div class="riwayat-detail-row"><span class="k">Bergerak Lainnya</span><span class="v" style="max-width:60%;font-size:11.5px;">' + escapeHtml(asetBergerak) + '</span></div>' +
+                    '<div class="riwayat-detail-row"><span class="k">Tidak Bergerak</span><span class="v" style="max-width:60%;font-size:11.5px;">' + escapeHtml(asetTidak) + '</span></div>' +
+                    '</div>';
+            }
+
             function render() {
                 var list = all();
                 var filterEl = document.getElementById('riwayat-filter');
@@ -5659,6 +6251,10 @@
                         : escapeHtml(e.kode || '-');
                     var badgeTeks = meta.num ? ('Instrumen ' + meta.num + ' &middot; ' + meta.nama) : meta.nama;
                     var nilaiLabel = (e.modul === 'sosek' || e.modul === 'keluarga') ? 'Selisih / Bulan' : 'Bersih / Bulan';
+                    var isKeluarga = (e.modul === 'keluarga' && e.snapshotKeluarga);
+                    var extraActions = isKeluarga ?
+                        '    <button type="button" class="btn-outline-sm" data-riwayat-edit="' + e.id + '">Edit</button>' +
+                        '    <button type="button" class="btn-outline-sm" data-riwayat-pdf="' + e.id + '">Ekspor PDF</button>' : '';
                     return '' +
                         '<div class="riwayat-card module-' + e.modul + '">' +
                         '  <div class="riwayat-card-top">' +
@@ -5676,9 +6272,10 @@
                         '  <div class="riwayat-actions">' +
                         '    <button type="button" class="btn-outline-sm" data-riwayat-detail="' + e.id + '">Lihat Detail</button>' +
                         '    <button type="button" class="btn-outline-sm" data-riwayat-salin="' + e.id + '">Salin</button>' +
+                        extraActions +
                         '    <button type="button" class="btn-outline-sm btn-danger-outline" data-riwayat-hapus="' + e.id + '">Hapus</button>' +
                         '  </div>' +
-                        '  <div class="riwayat-detail" id="riwayat-detail-' + e.id + '">' + escapeHtml(e.ringkasan || '') + '</div>' +
+                        '  <div class="riwayat-detail" id="riwayat-detail-' + e.id + '">' + buildDetailHtml(e) + '</div>' +
                         '</div>';
                 }).join('');
             }
@@ -5747,6 +6344,35 @@
                     });
                     return;
                 }
+                var btnEdit = e.target.closest('[data-riwayat-edit]');
+                if (btnEdit) {
+                    var idE = btnEdit.getAttribute('data-riwayat-edit');
+                    var entryE = getById(idE);
+                    if (!entryE || !entryE.snapshotKeluarga) { showToast('Data lengkap tidak tersedia untuk diedit.'); return; }
+                    showConfirmModal({
+                        title: 'Edit Kuesioner Ini?',
+                        message: 'Draft yang sedang berjalan saat ini (jika ada) akan digantikan dengan data dari riwayat ini. Setelah selesai diedit, tekan Simpan di Blok 4 untuk memperbarui riwayat yang sama.'
+                    }, function () {
+                        window.KeluargaStore.save(JSON.parse(JSON.stringify(entryE.snapshotKeluarga)));
+                        window.KeluargaStore.setEditingId(idE);
+                        switchView('keluarga');
+                        setTimeout(function () {
+                            if (typeof window.kwReloadFromStore === 'function') window.kwReloadFromStore();
+                            if (typeof window.kwGotoStep === 'function') window.kwGotoStep(0);
+                            showToast('Mode edit aktif \u2014 ubah data lalu Simpan lagi di Blok 4.');
+                        }, 60);
+                    });
+                    return;
+                }
+                var btnPdf = e.target.closest('[data-riwayat-pdf]');
+                if (btnPdf) {
+                    var idP = btnPdf.getAttribute('data-riwayat-pdf');
+                    var entryP = getById(idP);
+                    if (!entryP) { showToast('Data tidak ditemukan.'); return; }
+                    if (typeof window.cetakPdfKeluarga === 'function') window.cetakPdfKeluarga(entryP);
+                    else showToast('Fitur ekspor PDF belum siap.');
+                    return;
+                }
             });
 
             var filterInput = document.getElementById('riwayat-filter');
@@ -5777,7 +6403,7 @@
                 });
             });
 
-            return { add: add, remove: remove, clearAll: clearAll, all: all, render: render, updateNavBadge: updateNavBadge };
+            return { add: add, update: update, getById: getById, remove: remove, clearAll: clearAll, all: all, render: render, updateNavBadge: updateNavBadge };
         })();
         window.renderRiwayat = Riwayat.render;
         window.Riwayat = Riwayat;
@@ -5786,9 +6412,10 @@
         /* ===================== DATA KELUARGA TERPADU ===================== */
         var KeluargaStore = (function () {
             var DRAFT_KEY = 'se2026_keluarga_draft';
+            var EDITING_KEY = 'se2026_keluarga_editing_id';
 
             function blank() {
-                return { identitas: { namaKK: '', sls: '', noUrut: '' }, anggota: [], usahaList: [] };
+                return { identitas: { namaKK: '', sls: '', noUrut: '', noWa: '' }, anggota: [], usahaList: [] };
             }
             function load() {
                 try {
@@ -5808,7 +6435,20 @@
             function newUsahaId() {
                 return 'ush' + Date.now() + Math.random().toString(36).slice(2, 6);
             }
-            return { blank: blank, load: load, save: save, clear: clear, newAnggotaId: newAnggotaId, newUsahaId: newUsahaId };
+            function setEditingId(id) {
+                try { localStorage.setItem(EDITING_KEY, id); } catch (e) { }
+            }
+            function getEditingId() {
+                try { return localStorage.getItem(EDITING_KEY); } catch (e) { return null; }
+            }
+            function clearEditingId() {
+                try { localStorage.removeItem(EDITING_KEY); } catch (e) { }
+            }
+            return {
+                blank: blank, load: load, save: save, clear: clear,
+                newAnggotaId: newAnggotaId, newUsahaId: newUsahaId,
+                setEditingId: setEditingId, getEditingId: getEditingId, clearEditingId: clearEditingId
+            };
         })();
         window.KeluargaStore = KeluargaStore;
 
@@ -6107,7 +6747,8 @@
             var data = KeluargaStore.load();
             if (!data.anggota) data.anggota = [];
             if (!data.usahaList) data.usahaList = [];
-            if (!data.identitas) data.identitas = { namaKK: '', sls: '', noUrut: '' };
+            if (!data.identitas) data.identitas = { namaKK: '', sls: '', noUrut: '', noWa: '' };
+            if (data.identitas.noWa === undefined) data.identitas.noWa = '';
 
             /* Migrasi draft lama (sebelum Blok 2/3 dipisah): aktifkan toggle Ya/Tidak
                otomatis bila sebelumnya sudah ada nominal, dan pindahkan usahaLink lama
@@ -6135,6 +6776,7 @@
             var elNama = document.getElementById('kw-nama-kk');
             var elSls = document.getElementById('kw-sls');
             var elNourut = document.getElementById('kw-nourut');
+            var elNowa = document.getElementById('kw-nowa');
             var listEl = document.getElementById('kw-anggota-list');
             var usahaListEl = document.getElementById('kw-usaha-list');
             var pendapatanListEl = document.getElementById('kw-pendapatan-list');
@@ -6142,6 +6784,7 @@
             elNama.value = data.identitas.namaKK || '';
             elSls.value = data.identitas.sls || '';
             elNourut.value = data.identitas.noUrut || '';
+            elNowa.value = data.identitas.noWa || '';
 
             function triggerDraftIndicator() {
                 var indEl = document.getElementById('draft-indicator-keluarga');
@@ -6158,11 +6801,13 @@
                 data.identitas.namaKK = elNama.value;
                 data.identitas.sls = elSls.value;
                 data.identitas.noUrut = elNourut.value;
+                data.identitas.noWa = elNowa.value;
                 persist();
             }
             elNama.addEventListener('input', persistIdentitas);
             elSls.addEventListener('input', persistIdentitas);
             elNourut.addEventListener('input', persistIdentitas);
+            elNowa.addEventListener('input', persistIdentitas);
 
             function formatRpK(n) { return 'Rp ' + Math.round(n || 0).toLocaleString('id-ID'); }
             function escAttrK(s) { return String(s == null ? '' : s).replace(/"/g, '&quot;'); }
@@ -6511,6 +7156,20 @@
 
             window.kwGetSnapshot = function () {
                 return KeluargaStore.load();
+            };
+
+            window.kwReloadFromStore = function () {
+                data = KeluargaStore.load();
+                if (!data.identitas) data.identitas = { namaKK: '', sls: '', noUrut: '', noWa: '' };
+                if (!data.anggota) data.anggota = [];
+                if (!data.usahaList) data.usahaList = [];
+                elNama.value = data.identitas.namaKK || '';
+                elSls.value = data.identitas.sls || '';
+                elNourut.value = data.identitas.noUrut || '';
+                elNowa.value = data.identitas.noWa || '';
+                renderAnggotaList();
+                renderUsahaList();
+                renderPendapatan();
             };
 
             renderAnggotaList();
@@ -7971,6 +8630,21 @@
                 let uktTahun = uktSemester * 2;
                 let totalRutinTahun = pajakKendaraan + pajakRumah + hariRaya + uktTahun;
 
+                /* Blok F — Kondisi Perumahan */
+                let lantaiBahan = el("lantai-bahan-sosek").value;
+                let lantaiKondisiEl = document.querySelector('input[name="lantai_kondisi_sosek"]:checked');
+                let lantaiKondisi = lantaiKondisiEl ? lantaiKondisiEl.value : '';
+                let dindingBahan = el("dinding-bahan-sosek").value;
+                let dindingKondisiEl = document.querySelector('input[name="dinding_kondisi_sosek"]:checked');
+                let dindingKondisi = dindingKondisiEl ? dindingKondisiEl.value : '';
+                let atapBahan = el("atap-bahan-sosek").value;
+                let atapKondisiEl = document.querySelector('input[name="atap_kondisi_sosek"]:checked');
+                let atapKondisi = atapKondisiEl ? atapKondisiEl.value : '';
+
+                /* Blok G — Kepemilikan Aset Lainnya */
+                let asetBergerak = Array.prototype.map.call(document.querySelectorAll('.aset-bergerak-chk:checked'), function (c) { return c.value; });
+                let asetTidakBergerak = Array.prototype.map.call(document.querySelectorAll('.aset-tidak-bergerak-chk:checked'), function (c) { return c.value; });
+
                 /* Headline output utama */
                 el("out-pangan-minggu-sosek").innerText = formatRp(panganMinggu);
                 el("out-nonpangan-bulan-sosek").innerText = formatRp(totalNonPanganBulan);
@@ -8059,7 +8733,15 @@
                     pemasukanBulan: pemasukanBulan,
                     totalPengeluaranBulan: totalPengeluaranBulan,
                     totalPengeluaranTahun: totalPengeluaranTahun,
-                    selisihBulan: selisihBulan
+                    selisihBulan: selisihBulan,
+                    perumahan: {
+                        lantaiBahan: lantaiBahan, lantaiKondisi: lantaiKondisi,
+                        dindingBahan: dindingBahan, dindingKondisi: dindingKondisi,
+                        atapBahan: atapBahan, atapKondisi: atapKondisi
+                    },
+                    asetBergerak: asetBergerak, asetTidakBergerak: asetTidakBergerak,
+                    motorList: collectKendaraanTerpilih('motor'),
+                    mobilList: collectKendaraanTerpilih('mobil')
                 };
             }
 
@@ -8249,6 +8931,7 @@
                     'Nama Kepala Keluarga: ' + (idn.namaKK || '(Tanpa nama)'),
                     'SLS/RT: ' + (idn.sls || '-'),
                     'No. Urut Bangunan: ' + (idn.noUrut || '-'),
+                    'No. WhatsApp/HP: ' + (idn.noWa || '-'),
                     '',
                     '--- BLOK 1: ANGGOTA KELUARGA (' + anggota.length + ' orang) ---'
                 ];
@@ -8306,11 +8989,21 @@
                     .catch(function () { showToast('Gagal menyalin otomatis.'); });
             });
 
+            el("btn-pdf-sosek").addEventListener("click", function () {
+                if (!lastHasilSosek) { showToast('Tekan Hitung terlebih dahulu sebelum ekspor PDF.'); return; }
+                var kdata = KeluargaStore.load();
+                window.cetakPdfKeluarga({
+                    snapshotKeluarga: kdata,
+                    snapshotSosek: lastHasilSosek
+                });
+            });
+
             el("btn-simpan-riwayat-sosek").addEventListener("click", function () {
                 if (!lastHasilSosek) { showToast('Tekan Hitung terlebih dahulu sebelum menyimpan ke riwayat.'); return; }
                 var kdata = KeluargaStore.load();
                 var idn = kdata.identitas || {};
-                Riwayat.add({
+                var editingId = KeluargaStore.getEditingId ? KeluargaStore.getEditingId() : null;
+                var entry = {
                     modul: 'keluarga',
                     nama: idn.namaKK || el('resp-nama-sosek').value.trim(),
                     nourut: idn.noUrut || el('resp-nourut-sosek').value.trim(),
@@ -8318,15 +9011,24 @@
                     bersihBulan: lastHasilSosek.selisihBulan || 0,
                     bersihTahun: (lastHasilSosek.selisihBulan || 0) * 12,
                     ringkasan: generateRingkasanSosek(),
-                    ringkasanLengkap: generateRingkasanLengkap()
-                });
+                    ringkasanLengkap: generateRingkasanLengkap(),
+                    snapshotKeluarga: JSON.parse(JSON.stringify(kdata)),
+                    snapshotSosek: JSON.parse(JSON.stringify(lastHasilSosek))
+                };
+                if (editingId && Riwayat.update(editingId, entry)) {
+                    showToast('Perubahan tersimpan (memperbarui riwayat yang sama).');
+                    if (KeluargaStore.clearEditingId) KeluargaStore.clearEditingId();
+                } else {
+                    Riwayat.add(entry);
+                    showToast('Kuesioner keluarga (Blok 1\u20134) tersimpan ke Riwayat.');
+                }
                 var btn = el('btn-simpan-riwayat-sosek');
                 btn.classList.add('is-saved');
                 setTimeout(function () { btn.classList.remove('is-saved'); }, 1500);
-                showToast('Kuesioner keluarga (Blok 1\u20134) tersimpan ke Riwayat.');
             });
 
             AutoSave.bind('sosek', el('form-sosek'));
+            AutoSave.restore('sosek', el('form-sosek'));
 
             el("btn-hitung-sosek").addEventListener("click", hitungSosek);
         }
