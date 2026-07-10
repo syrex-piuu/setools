@@ -9199,17 +9199,29 @@
                     snapshotKeluarga: JSON.parse(JSON.stringify(kdata)),
                     snapshotSosek: JSON.parse(JSON.stringify(lastHasilSosek))
                 };
+                var pesanToast;
                 if (editingId && Riwayat.update(editingId, entry)) {
-                    showToast('Perubahan tersimpan (memperbarui riwayat yang sama).');
+                    pesanToast = 'Perubahan tersimpan. Memuat ulang halaman untuk kuesioner baru\u2026';
                     if (KeluargaStore.clearEditingId) KeluargaStore.clearEditingId();
                 } else {
                     Riwayat.add(entry);
-                    showToast('Kuesioner keluarga (Blok 1\u20134) tersimpan ke Riwayat.');
+                    pesanToast = 'Kuesioner keluarga (Blok 1\u20134) tersimpan ke Riwayat. Memuat ulang halaman untuk kuesioner baru\u2026';
                 }
+
+                /* Setelah Blok 1-4 tersimpan, bersihkan seluruh draft (kuesioner
+                   keluarga & kalkulator usaha terkait) lalu refresh seluruh halaman,
+                   supaya form kembali kosong dan tidak nyangkut data keluarga
+                   sebelumnya saat mulai mendata keluarga berikutnya. */
+                KeluargaStore.clear();
+                ['keluarga', 'utp', 'buah', 'usaha', 'bgn', 'tani', 'sosek'].forEach(function (m) { AutoSave.clear(m); });
+                if (window.LinkKeluarga && typeof window.LinkKeluarga.clearContext === 'function') window.LinkKeluarga.clearContext();
+
+                showToast(pesanToast);
                 var btn = el('btn-simpan-riwayat-sosek');
                 btn.classList.add('is-saved');
-                setTimeout(function () { btn.classList.remove('is-saved'); }, 1500);
+                setTimeout(function () { location.reload(); }, 900);
             });
+
 
             AutoSave.bind('sosek', el('form-sosek'));
             AutoSave.restore('sosek', el('form-sosek'));
