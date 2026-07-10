@@ -3332,6 +3332,56 @@
             color: #888;
             font-style: italic;
         }
+
+        #print-area .pd-rincian-row td {
+            border-top: none;
+            padding: 0 7px 10px;
+            background: #fbfbfa;
+        }
+
+        #print-area .pd-rincian {
+            border: 1px solid #dbe0de;
+            border-left: 3px solid #16232c;
+            border-radius: 3px;
+            padding: 8px 10px;
+            background: #fbfbfa;
+        }
+
+        #print-area .pd-rincian-title {
+            font-size: 9.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .03em;
+            color: #55666f;
+            margin-bottom: 4px;
+        }
+
+        #print-area .pd-rincian-table {
+            margin: 0;
+        }
+
+        #print-area .pd-rincian-table td {
+            font-size: 10px;
+            padding: 4px 7px;
+        }
+
+        #print-area .pd-rincian-section td {
+            font-weight: 700;
+            background: #eef2f1;
+            text-transform: uppercase;
+            font-size: 9px;
+            letter-spacing: .03em;
+            color: #33403f;
+        }
+
+        #print-area .pd-rincian-note td {
+            font-style: italic;
+            color: #888;
+            font-size: 9px;
+            text-align: right;
+            border: none;
+            padding: 3px 7px 0;
+        }
     </style>
 </head>
 
@@ -3440,7 +3490,7 @@
                     <h1>Dasbor Kuesioner Keluarga Terpadu</h1>
                     <p>Satu alur pendataan per keluarga, dari identitas sampai kondisi sosial ekonomi: Blok 1
                         Identitas &amp; Anggota Keluarga &rarr; Blok 2 Keterangan Usaha (tersambung otomatis ke
-                        kalkulator pertanian, dagang keliling, usaha mikro, buruh bangunan, dan buruh tani) &rarr;
+                        kalkulator pertanian, dagang keliling, usaha mikro, buruh harian lepas, dan buruh tani) &rarr;
                         Blok 3 Pendapatan &rarr; Blok 4 Sosial Ekonomi, lalu tersimpan sekali jalan ke Riwayat.</p>
                 </div>
 
@@ -4533,7 +4583,7 @@
                 </div>
             </section>
 
-            <!-- ===== MODUL 04: BURUH BANGUNAN ===== -->
+            <!-- ===== MODUL 04: BURUH HARIAN LEPAS ===== -->
             <section id="view-bgn" class="view module-bgn">
                 <div class="card">
                     <div class="page-actions">
@@ -4553,8 +4603,8 @@
                     <span class="eyebrow">Sensus Ekonomi 2026 &middot; Instrumen 04</span>
                     <div class="doc-head">
                         <div>
-                            <h1>Kalkulator Buruh Bangunan</h1>
-                            <p class="doc-sub">Estimasi rata-rata pendapatan bulanan buruh bangunan (kenek, tukang,
+                            <h1>Kalkulator Buruh Harian Lepas</h1>
+                            <p class="doc-sub">Estimasi rata-rata pendapatan bulanan buruh harian lepas (kenek, tukang,
                                 mandor).</p>
                         </div>
                         <div class="doc-head__icon">
@@ -5515,7 +5565,7 @@
                                 <li class="csel-opt" role="option" data-value="utp">Pertanian</li>
                                 <li class="csel-opt" role="option" data-value="buah">Pedagang Buah</li>
                                 <li class="csel-opt" role="option" data-value="usaha">Usaha Dagang &amp; Jasa</li>
-                                <li class="csel-opt" role="option" data-value="bgn">Buruh Bangunan</li>
+                                <li class="csel-opt" role="option" data-value="bgn">Buruh Harian Lepas</li>
                                 <li class="csel-opt" role="option" data-value="tani">Buruh Tani</li>
                                 <li class="csel-opt" role="option" data-value="sosek">Sosial Ekonomi (Sosek)</li>
                             </ul>
@@ -5717,7 +5767,7 @@
 
         /* ===================== SALIN NILAI PENDAPATAN BERSIH/BULAN ===================== */
         /* Dipakai pada highlight "Pendapatan Bersih / Bulan" di tiap instrumen (Pertanian,
-           Pedagang Buah, Buruh Bangunan, Buruh Tani) supaya nilainya bisa langsung
+           Pedagang Buah, Buruh Harian Lepas, Buruh Tani) supaya nilainya bisa langsung
            ditempel ke kolom Pemasukan Anggota Keluarga pada halaman Sosek, tanpa perlu
            mengetik ulang secara manual. */
         function fallbackCopyTeks(teks) {
@@ -5804,6 +5854,39 @@
         }
         function pdfRp(n) { return 'Rp ' + Math.round(n || 0).toLocaleString('id-ID'); }
 
+        /* Mengubah teks ringkasan kalkulator usaha (baris "Label: Nilai", pemisah
+           "--- Judul Seksi ---", dan kombinasi "Label: Nilai | Label2: Nilai2")
+           menjadi tabel 2 kolom yang rapi, senada dengan tabel blok lainnya. */
+        function pdfRincianTable(teks) {
+            if (!teks) return '';
+            var rows = '';
+            String(teks).split('\n').forEach(function (line) {
+                line = line.trim();
+                if (!line) return;
+                if (/^===.*===$/.test(line)) return; // judul kalkulator, sudah terwakili kolom Jenis Usaha
+                if (/^(Nama|No\. Urut Bangunan|SLS\/RT)\s*:/i.test(line)) return; // identitas, sudah ada di kolom Pemilik
+                var sectionMatch = line.match(/^-{2,}\s*(.+?)\s*-{2,}$/);
+                if (sectionMatch) {
+                    rows += '<tr class="pd-rincian-section"><td colspan="2">' + pdfEsc(sectionMatch[1]) + '</td></tr>';
+                    return;
+                }
+                if (/^Dicatat\s*:/i.test(line)) {
+                    rows += '<tr class="pd-rincian-note"><td colspan="2">' + pdfEsc(line) + '</td></tr>';
+                    return;
+                }
+                line.split('|').forEach(function (part) {
+                    part = part.trim();
+                    if (!part) return;
+                    var idx = part.indexOf(':');
+                    if (idx === -1) { rows += '<tr><td colspan="2">' + pdfEsc(part) + '</td></tr>'; return; }
+                    var label = part.slice(0, idx).trim();
+                    var value = part.slice(idx + 1).trim();
+                    rows += '<tr><td>' + pdfEsc(label) + '</td><td class="num">' + pdfEsc(value) + '</td></tr>';
+                });
+            });
+            return '<table class="pd-rincian-table">' + rows + '</table>';
+        }
+
         window.cetakPdfKeluarga = function (entry) {
             var kd = entry.snapshotKeluarga || {};
             var sosek = entry.snapshotSosek || {};
@@ -5824,7 +5907,11 @@
             var blok2Rows = usahaList.length ? usahaList.map(function (u, i) {
                 var jenis = u.jenisUsaha === 'lainnya' ? (u.deskripsiLainnya || 'Usaha/Pekerjaan Lainnya') : (instrumenLabel[u.jenisUsaha] || u.jenisUsaha || '-');
                 var hasilTxt = (u.hasil && u.hasil.bersihBulan != null) ? pdfRp(u.hasil.bersihBulan) : 'Belum dihitung';
-                return '<tr><td>' + (i + 1) + '</td><td>' + pdfEsc(jenis) + '</td><td>' + pdfEsc(namaAnggota(u.pemilikId)) + '</td><td class="num">' + hasilTxt + '</td></tr>';
+                var row = '<tr><td>' + (i + 1) + '</td><td>' + pdfEsc(jenis) + '</td><td>' + pdfEsc(namaAnggota(u.pemilikId)) + '</td><td class="num">' + hasilTxt + '</td></tr>';
+                if (u.hasil && u.hasil.rincianTeks) {
+                    row += '<tr class="pd-rincian-row"><td></td><td colspan="3"><div class="pd-rincian"><div class="pd-rincian-title">Rincian Perhitungan Kalkulator Usaha</div>' + pdfRincianTable(u.hasil.rincianTeks) + '</div></td></tr>';
+                }
+                return row;
             }).join('') : '<tr><td colspan="4" class="pd-empty">Belum ada usaha yang didata</td></tr>';
 
             var totalKeluarga = 0;
@@ -6072,7 +6159,7 @@
                 utp: { nama: 'Pertanian', num: '01' },
                 buah: { nama: 'Pedagang Buah', num: '02' },
                 usaha: { nama: 'Usaha Dagang & Jasa', num: '03' },
-                bgn: { nama: 'Buruh Bangunan', num: '04' },
+                bgn: { nama: 'Buruh Harian Lepas', num: '04' },
                 tani: { nama: 'Buruh Tani', num: '05' },
                 sosek: { nama: 'Sosial Ekonomi', num: 'SE' },
                 keluarga: { nama: 'Kuesioner Keluarga Lengkap', num: 'KK' }
@@ -6523,7 +6610,7 @@
             var REGISTRY = {};
             var INSTRUMEN_LABEL = {
                 utp: 'Pertanian', buah: 'Pedagang Buah Keliling', usaha: 'Usaha Dagang & Jasa Mikro',
-                bgn: 'Buruh Bangunan', tani: 'Buruh Tani Musiman'
+                bgn: 'Buruh Harian Lepas', tani: 'Buruh Tani Musiman'
             };
 
             function getContext() {
@@ -6607,6 +6694,7 @@
                         ush.hasil = {
                             instrumenLabel: INSTRUMEN_LABEL[moduleId],
                             bersihBulan: hasil.bersihBulan,
+                            rincianTeks: hasil.rincianTeks || null,
                             terakhirDiisi: new Date().toISOString()
                         };
                         KeluargaStore.save(data);
@@ -6648,7 +6736,7 @@
                 utp: 'Kalkulator Pertanian',
                 buah: 'Kalkulator Pedagang Buah Keliling',
                 usaha: 'Kalkulator Usaha Dagang & Jasa Mikro',
-                bgn: 'Kalkulator Buruh Bangunan',
+                bgn: 'Kalkulator Buruh Harian Lepas',
                 tani: 'Kalkulator Buruh Tani Musiman',
                 sosek: 'Halaman Sosial Ekonomi Rumah Tangga',
                 riwayat: 'Riwayat Perhitungan'
@@ -6668,7 +6756,7 @@
                 var topbarTitle = document.getElementById('topbar-title');
                 var FALLBACK_TITLE = {
                     utp: 'Kalkulator Pertanian', buah: 'Pedagang Buah Keliling', usaha: 'Usaha Dagang & Jasa Mikro',
-                    bgn: 'Buruh Bangunan', tani: 'Buruh Tani Musiman', sosek: 'Blok 4 \u2014 Sosial Ekonomi'
+                    bgn: 'Buruh Harian Lepas', tani: 'Buruh Tani Musiman', sosek: 'Blok 4 \u2014 Sosial Ekonomi'
                 };
                 if (topbarTitle) {
                     if (nav) {
@@ -7573,7 +7661,7 @@
             AutoSave.restore('utp', el('form-utp'));
             LinkKeluarga.register('utp', {
                 namaFieldId: 'resp-nama-utp',
-                getHasil: function () { return lastHasilUtp ? { bersihBulan: lastHasilUtp.pendapatanBersihBulan } : null; }
+                getHasil: function () { return lastHasilUtp ? { bersihBulan: lastHasilUtp.pendapatanBersihBulan, rincianTeks: generateRingkasanUtp() } : null; }
             });
         }
         initUtp();
@@ -7796,7 +7884,7 @@
             AutoSave.restore('buah', el('form-buah'));
             LinkKeluarga.register('buah', {
                 namaFieldId: 'resp-nama-buah',
-                getHasil: function () { return lastHasilBuah ? { bersihBulan: lastHasilBuah.labaBulan } : null; }
+                getHasil: function () { return lastHasilBuah ? { bersihBulan: lastHasilBuah.labaBulan, rincianTeks: generateRingkasanBuah() } : null; }
             });
         }
         initBuah();
@@ -8105,12 +8193,12 @@
             AutoSave.restore('usaha', el('form-usaha'));
             LinkKeluarga.register('usaha', {
                 namaFieldId: 'resp-nama-usaha',
-                getHasil: function () { return lastHasilUsaha ? { bersihBulan: lastHasilUsaha.bersihBulanan } : null; }
+                getHasil: function () { return lastHasilUsaha ? { bersihBulan: lastHasilUsaha.bersihBulanan, rincianTeks: generateRingkasanUsaha() } : null; }
             });
         }
         initUsaha();
 
-        /* ===================== MODUL 04: BURUH BANGUNAN ===================== */
+        /* ===================== MODUL 04: BURUH HARIAN LEPAS ===================== */
         function initBgn() {
             const el = (id) => document.getElementById(id);
             var lastHasilBgn = null;
@@ -8158,7 +8246,7 @@
                 var sls = el('resp-sls-bgn').value.trim() || '-';
                 var roleLabel = h.role === 'Kenek' ? 'Laden/Kenek' : (h.role === 'Tukang' ? 'Tukang' : (h.role === 'Mandor' ? 'Mandor' : 'Lainnya'));
                 return [
-                    '=== KALKULATOR BURUH BANGUNAN (Instrumen 04) ===',
+                    '=== KALKULATOR BURUH HARIAN LEPAS (Instrumen 04) ===',
                     'Nama: ' + nama,
                     'No. Urut Bangunan: ' + noUrut,
                     'SLS/RT: ' + sls,
@@ -8211,7 +8299,7 @@
             calculateIncome();
             LinkKeluarga.register('bgn', {
                 namaFieldId: 'resp-nama-bgn',
-                getHasil: function () { return lastHasilBgn ? { bersihBulan: lastHasilBgn.averageMonthly } : null; }
+                getHasil: function () { return lastHasilBgn ? { bersihBulan: lastHasilBgn.averageMonthly, rincianTeks: generateRingkasanBgn() } : null; }
             });
         }
         initBgn();
@@ -8315,7 +8403,7 @@
             calculateIncome();
             LinkKeluarga.register('tani', {
                 namaFieldId: 'resp-nama-tani',
-                getHasil: function () { return lastHasilTani ? { bersihBulan: lastHasilTani.averageMonthly } : null; }
+                getHasil: function () { return lastHasilTani ? { bersihBulan: lastHasilTani.averageMonthly, rincianTeks: generateRingkasanTani() } : null; }
             });
         }
         initTani();
