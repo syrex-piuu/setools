@@ -1979,7 +1979,7 @@
             gap: 8px;
         }
 
-        .aset-checklist label {
+        .aset-checklist > label {
             display: flex;
             align-items: center;
             gap: 9px;
@@ -1992,18 +1992,41 @@
             transition: .15s;
         }
 
-        .aset-checklist label:has(input:checked) {
+        .aset-checklist > label:has(input:checked) {
             border-color: var(--accent);
             background: var(--accent-soft);
             color: var(--accent-deep);
             font-weight: 600;
         }
 
-        .aset-checklist input {
+        .aset-checklist > label input {
             width: 16px;
             height: 16px;
             accent-color: var(--accent);
             flex: 0 0 auto;
+        }
+
+        .aset-detail {
+            margin: -2px 2px 2px 14px;
+            padding: 12px 13px;
+            border-left: 3px solid var(--accent);
+            background: var(--accent-soft);
+            border-radius: 0 8px 8px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .aset-detail .field {
+            margin-bottom: 0;
+        }
+
+        .aset-detail .field-label.sub {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--ink-soft);
+            margin-bottom: 6px;
+            display: block;
         }
 
         @media (max-width: 640px) {
@@ -3729,7 +3752,7 @@
                             (m²). Mangga memakai input jumlah pohon.</div>
                     </div>
 
-                    <form id="form-utp" novalidate>
+                    <form id="form-utp" novalidate autocomplete="off">
                         <fieldset>
                             <div class="blok-label"><span class="dot"></span>Blok 0 — Data Responden</div>
                             <div class="field">
@@ -4016,7 +4039,7 @@
                         </div>
                     </div>
 
-                    <form id="form-buah" novalidate>
+                    <form id="form-buah" novalidate autocomplete="off">
                         <fieldset>
                             <div class="blok-label"><span class="dot"></span>Blok 0 — Data Responden</div>
                             <div class="field">
@@ -4286,7 +4309,7 @@
                         </div>
                     </div>
 
-                    <form id="form-usaha" novalidate>
+                    <form id="form-usaha" novalidate autocomplete="off">
                         <fieldset>
                             <div class="blok-label"><span class="dot"></span>Blok 0 — Data Responden</div>
                             <div class="field">
@@ -4628,7 +4651,7 @@
                             aktif.</div>
                     </div>
 
-                    <form id="form-bgn" novalidate>
+                    <form id="form-bgn" novalidate autocomplete="off">
                         <fieldset>
                             <div class="blok-label"><span class="dot"></span>Blok 0 — Data Responden</div>
                             <div class="field">
@@ -4761,7 +4784,7 @@
                         </div>
                     </div>
 
-                    <form id="form-tani" novalidate>
+                    <form id="form-tani" novalidate autocomplete="off">
                         <fieldset>
                             <div class="blok-label"><span class="dot"></span>Blok 0 — Data Responden</div>
                             <div class="field">
@@ -4962,7 +4985,7 @@
 
                     <div class="sosek-grid">
                     <div class="sosek-col-form">
-                    <form id="form-sosek" novalidate>
+                    <form id="form-sosek" novalidate autocomplete="off">
                         <fieldset>
                             <div class="blok-label"><span class="dot"></span>Identitas Keluarga</div>
                             <div class="kw-usaha-hasil-badge" id="sosek-identitas-sync" style="margin-bottom:4px;">
@@ -5297,15 +5320,45 @@
                             <div class="field">
                                 <label class="field-label">Aset Bergerak (di luar kendaraan pada Blok E)</label>
                                 <div class="aset-checklist" id="aset-bergerak-sosek">
-                                    <label><input type="checkbox" class="aset-bergerak-chk" name="aset_bergerak_sosek" value="Emas/Perhiasan"> Emas / Perhiasan</label>
+                                    <label><input type="checkbox" class="aset-bergerak-chk" name="aset_bergerak_sosek" value="Emas/Perhiasan" id="chk-emas-sosek"> Emas / Perhiasan</label>
+                                    <div class="aset-detail" id="detail-emas-sosek" style="display:none;">
+                                        <div class="field">
+                                            <label class="field-label sub" for="emas-gram-sosek">Berapa Gram? (total seluruh emas/perhiasan)</label>
+                                            <input type="text" id="emas-gram-sosek" inputmode="numeric" placeholder="Contoh: 15">
+                                        </div>
+                                    </div>
                                     <label><input type="checkbox" class="aset-bergerak-chk" name="aset_bergerak_sosek" value="Elektronik Utama (TV/Kulkas/Mesin Cuci)"> Elektronik Utama (TV / Kulkas / Mesin Cuci)</label>
                                 </div>
                             </div>
                             <div class="field">
                                 <label class="field-label">Aset Tidak Bergerak</label>
                                 <div class="aset-checklist" id="aset-tidak-bergerak-sosek">
-                                    <label><input type="checkbox" class="aset-tidak-bergerak-chk" name="aset_tidak_bergerak_sosek" value="Tanah/Sawah/Kebun"> Tanah / Sawah / Kebun</label>
-                                    <label><input type="checkbox" class="aset-tidak-bergerak-chk" name="aset_tidak_bergerak_sosek" value="Rumah/Bangunan Lain"> Rumah / Bangunan Lain (selain tempat tinggal)</label>
+                                    <label><input type="checkbox" class="aset-tidak-bergerak-chk" name="aset_tidak_bergerak_sosek" value="Tanah/Sawah/Kebun" id="chk-lahan-sosek"> Tanah / Sawah / Kebun</label>
+                                    <div class="aset-detail" id="detail-lahan-sosek" style="display:none;">
+                                        <div class="field-row-2">
+                                            <div class="field">
+                                                <label class="field-label sub" for="lahan-jumlah-sosek">Jumlah Bidang/Lahan</label>
+                                                <input type="text" id="lahan-jumlah-sosek" inputmode="numeric" placeholder="Contoh: 2">
+                                            </div>
+                                            <div class="field">
+                                                <label class="field-label sub" for="lahan-harga-sosek">Estimasi Total Harga</label>
+                                                <div class="prefix-wrap"><span class="rp">Rp</span><input type="text" id="lahan-harga-sosek" inputmode="numeric" placeholder="Contoh: 150.000.000"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <label><input type="checkbox" class="aset-tidak-bergerak-chk" name="aset_tidak_bergerak_sosek" value="Rumah/Bangunan Lain" id="chk-rumah-sosek"> Rumah / Bangunan Lain (selain tempat tinggal)</label>
+                                    <div class="aset-detail" id="detail-rumah-sosek" style="display:none;">
+                                        <div class="field-row-2">
+                                            <div class="field">
+                                                <label class="field-label sub" for="rumah-jumlah-sosek">Jumlah Rumah/Bangunan</label>
+                                                <input type="text" id="rumah-jumlah-sosek" inputmode="numeric" placeholder="Contoh: 1">
+                                            </div>
+                                            <div class="field">
+                                                <label class="field-label sub" for="rumah-harga-sosek">Estimasi Total Harga</label>
+                                                <div class="prefix-wrap"><span class="rp">Rp</span><input type="text" id="rumah-harga-sosek" inputmode="numeric" placeholder="Contoh: 100.000.000"></div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </fieldset>
@@ -5926,8 +5979,27 @@
             }).join('') : '<tr><td colspan="6" class="pd-empty">-</td></tr>';
 
             var per = sosek.perumahan || {};
-            var asetBergerakTxt = (sosek.asetBergerak || []).join(', ') || '-';
-            var asetTidakTxt = (sosek.asetTidakBergerak || []).join(', ') || '-';
+            var asetBergerakTxt = (sosek.asetBergerak || []).length ? sosek.asetBergerak.map(function (label) {
+                if (label === 'Emas/Perhiasan' && sosek.emasGram) {
+                    return 'Emas / Perhiasan (' + Math.round(sosek.emasGram).toLocaleString('id-ID') + ' gram)';
+                }
+                return label.replace('/', ' / ');
+            }).join(', ') : '-';
+            var asetTidakTxt = (sosek.asetTidakBergerak || []).length ? sosek.asetTidakBergerak.map(function (label) {
+                if (label === 'Tanah/Sawah/Kebun') {
+                    var rincianLahan = [];
+                    if (sosek.lahanJumlah) rincianLahan.push(Math.round(sosek.lahanJumlah).toLocaleString('id-ID') + ' bidang');
+                    if (sosek.lahanHarga) rincianLahan.push('estimasi ' + pdfRp(sosek.lahanHarga));
+                    return 'Tanah / Sawah / Kebun' + (rincianLahan.length ? ' (' + rincianLahan.join(', ') + ')' : '');
+                }
+                if (label === 'Rumah/Bangunan Lain') {
+                    var rincianRumah = [];
+                    if (sosek.rumahJumlah) rincianRumah.push(Math.round(sosek.rumahJumlah).toLocaleString('id-ID') + ' unit');
+                    if (sosek.rumahHarga) rincianRumah.push('estimasi ' + pdfRp(sosek.rumahHarga));
+                    return 'Rumah / Bangunan Lain' + (rincianRumah.length ? ' (' + rincianRumah.join(', ') + ')' : '');
+                }
+                return label;
+            }).join(', ') : '-';
 
             var html = '' +
                 '<div class="pd-wrap">' +
@@ -6326,8 +6398,27 @@
                     '<div class="riwayat-detail-row"><span class="k">Atap</span><span class="v">' + escapeHtml(per.atapBahan || '-') + (per.atapKondisi ? ' (' + escapeHtml(per.atapKondisi) + ')' : '') + '</span></div>'
                     : '<p class="riwayat-detail-empty">Kondisi perumahan belum didata.</p>';
 
-                var asetBergerak = (sosek.asetBergerak && sosek.asetBergerak.length) ? sosek.asetBergerak.join(', ') : '-';
-                var asetTidak = (sosek.asetTidakBergerak && sosek.asetTidakBergerak.length) ? sosek.asetTidakBergerak.join(', ') : '-';
+                var asetBergerak = (sosek.asetBergerak && sosek.asetBergerak.length) ? sosek.asetBergerak.map(function (label) {
+                    if (label === 'Emas/Perhiasan' && sosek.emasGram) {
+                        return 'Emas/Perhiasan (' + Math.round(sosek.emasGram).toLocaleString('id-ID') + ' gram)';
+                    }
+                    return label;
+                }).join(', ') : '-';
+                var asetTidak = (sosek.asetTidakBergerak && sosek.asetTidakBergerak.length) ? sosek.asetTidakBergerak.map(function (label) {
+                    if (label === 'Tanah/Sawah/Kebun') {
+                        var r1 = [];
+                        if (sosek.lahanJumlah) r1.push(Math.round(sosek.lahanJumlah).toLocaleString('id-ID') + ' bidang');
+                        if (sosek.lahanHarga) r1.push('estimasi ' + fmtRpDetail(sosek.lahanHarga));
+                        return 'Tanah/Sawah/Kebun' + (r1.length ? ' (' + r1.join(', ') + ')' : '');
+                    }
+                    if (label === 'Rumah/Bangunan Lain') {
+                        var r2 = [];
+                        if (sosek.rumahJumlah) r2.push(Math.round(sosek.rumahJumlah).toLocaleString('id-ID') + ' unit');
+                        if (sosek.rumahHarga) r2.push('estimasi ' + fmtRpDetail(sosek.rumahHarga));
+                        return 'Rumah/Bangunan Lain' + (r2.length ? ' (' + r2.join(', ') + ')' : '');
+                    }
+                    return label;
+                }).join(', ') : '-';
                 var motorN = (sosek.motorList || []).length, mobilN = (sosek.mobilList || []).length;
                 var asetKendaraanHtml = (motorN || mobilN)
                     ? '<div class="riwayat-detail-row"><span class="k">Kendaraan</span><span class="v">' + (motorN ? motorN + ' motor' : '') + ((motorN && mobilN) ? ', ' : '') + (mobilN ? mobilN + ' mobil' : '') + '</span></div>'
@@ -6507,6 +6598,21 @@
                     }, function () {
                         window.KeluargaStore.save(JSON.parse(JSON.stringify(entryE.snapshotKeluarga)));
                         window.KeluargaStore.setEditingId(idE);
+
+                        /* Kembalikan juga isian mentah Blok 4 (Sosial Ekonomi) milik
+                           kuesioner ini, supaya saat dibuka kembali datanya tetap ada,
+                           bukan malah kosong karena draft sebelumnya sudah dibersihkan
+                           otomatis setelah kuesioner ini disimpan. */
+                        var formSosek = document.getElementById('form-sosek');
+                        if (entryE.snapshotSosekForm) {
+                            try { localStorage.setItem('se2026_draft_sosek', JSON.stringify(entryE.snapshotSosekForm)); } catch (e2) { }
+                            if (formSosek && window.AutoSave && typeof window.AutoSave.restore === 'function') window.AutoSave.restore('sosek', formSosek);
+                        } else {
+                            if (window.AutoSave && typeof window.AutoSave.clear === 'function') window.AutoSave.clear('sosek');
+                            if (formSosek) formSosek.reset();
+                        }
+                        if (typeof window.kwSyncAsetDetailSosek === 'function') window.kwSyncAsetDetailSosek();
+
                         switchView('keluarga');
                         setTimeout(function () {
                             if (typeof window.kwReloadFromStore === 'function') window.kwReloadFromStore();
@@ -6701,6 +6807,11 @@
                     }
                     clearContext();
                     removeBanner(moduleId);
+                    /* Bersihkan draft kalkulator ini & kembalikan formnya ke kondisi
+                       kosong, supaya kalau kalkulator ini dibuka lagi nanti (untuk
+                       usaha/orang lain), tidak nyangkut data perhitungan yang barusan
+                       sudah tersambung ke Blok 2. */
+                    if (typeof window.resetPage === 'function') window.resetPage(moduleId, { silent: true });
                     switchView('keluarga');
                     setTimeout(function () {
                         if (typeof window.kwRefreshUsaha === 'function') window.kwRefreshUsaha();
@@ -6744,6 +6855,29 @@
 
             function switchView(name, opts) {
                 opts = opts || {};
+
+                /* Kalau sedang dalam mode Edit kuesioner keluarga (Blok 1-4) dan
+                   pengguna pindah ke Beranda/Riwayat tanpa menekan Simpan dulu,
+                   anggap proses edit itu dibatalkan: bersihkan draftnya supaya
+                   lain kali membuka Form Keluarga selalu dalam keadaan kosong/baru,
+                   bukan nyangkut ke data yang tadi sedang diedit. */
+                if (name === 'beranda' || name === 'riwayat') {
+                    var currentEditingId = (typeof KeluargaStore !== 'undefined' && KeluargaStore.getEditingId) ? KeluargaStore.getEditingId() : null;
+                    if (currentEditingId) {
+                        if (KeluargaStore.clearEditingId) KeluargaStore.clearEditingId();
+                        if (typeof LinkKeluarga !== 'undefined' && typeof LinkKeluarga.clearContext === 'function') LinkKeluarga.clearContext();
+                        /* Reset TOTAL tampilan Blok 1-4 (bukan cuma draft di
+                           localStorage / form.reset() biasa), supaya dropdown custom
+                           (Daya Listrik, bahan lantai/dinding/atap di Blok F, dsb) ikut
+                           benar-benar kembali kosong, bukan cuma nilai tersembunyinya
+                           saja yang bersih sementara tampilannya masih nyangkut. */
+                        if (typeof window.resetPage === 'function') {
+                            window.resetPage('keluarga', { silent: true });
+                            window.resetPage('sosek', { silent: true });
+                        }
+                    }
+                }
+
                 document.querySelectorAll('.view').forEach(function (v) { v.classList.remove('active'); });
                 document.querySelectorAll('.nav-item').forEach(function (b) { b.classList.remove('active'); });
                 var view = document.getElementById('view-' + name);
@@ -6817,7 +6951,8 @@
                 }, function () { resetPage(name); });
             }
 
-            function resetPage(name) {
+            function resetPage(name, opts) {
+                opts = opts || {};
                 var view = document.getElementById('view-' + name);
                 if (!view || typeof pristineHTML[name] === 'undefined') return;
 
@@ -6837,8 +6972,10 @@
                 else if (name === 'sosek' && typeof initSosek === 'function') initSosek();
                 if (typeof LinkKeluarga !== 'undefined') LinkKeluarga.checkAndAttach(name);
 
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-                showToast('Halaman berhasil dimuat ulang.');
+                if (!opts.silent) {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    showToast('Halaman berhasil dimuat ulang.');
+                }
             }
             window.resetPage = resetPage;
 
@@ -7647,11 +7784,14 @@
                 });
                 var btn = el('btn-simpan-riwayat-utp');
                 btn.classList.add('is-saved');
-                /* Bersihkan draft kalkulator ini lalu refresh halaman supaya form
-                   kembali kosong untuk mendata responden berikutnya. */
-                if (typeof AutoSave !== 'undefined') AutoSave.clear('utp');
                 showToast('Tersimpan ke Riwayat. Memuat ulang halaman untuk data baru\u2026');
-                setTimeout(function () { location.reload(); }, 900);
+                /* Bersihkan draft kalkulator ini tepat sebelum reload (bukan lebih awal),
+                   supaya tidak ada auto-save debounce yang sempat menulis ulang draft
+                   lama ke localStorage di sela-sela jeda sebelum halaman dimuat ulang. */
+                setTimeout(function () {
+                    if (typeof AutoSave !== 'undefined') AutoSave.clear('utp');
+                    location.reload();
+                }, 900);
             });
 
 
@@ -7872,9 +8012,11 @@
                 });
                 var btn = el('btn-simpan-riwayat-buah');
                 btn.classList.add('is-saved');
-                if (typeof AutoSave !== 'undefined') AutoSave.clear('buah');
                 showToast('Tersimpan ke Riwayat. Memuat ulang halaman untuk data baru\u2026');
-                setTimeout(function () { location.reload(); }, 900);
+                setTimeout(function () {
+                    if (typeof AutoSave !== 'undefined') AutoSave.clear('buah');
+                    location.reload();
+                }, 900);
             });
 
 
@@ -8166,9 +8308,11 @@
                 });
                 var btn = el('btn-simpan-riwayat-usaha');
                 btn.classList.add('is-saved');
-                if (typeof AutoSave !== 'undefined') AutoSave.clear('usaha');
                 showToast('Tersimpan ke Riwayat. Memuat ulang halaman untuk data baru\u2026');
-                setTimeout(function () { location.reload(); }, 900);
+                setTimeout(function () {
+                    if (typeof AutoSave !== 'undefined') AutoSave.clear('usaha');
+                    location.reload();
+                }, 900);
             });
 
 
@@ -8290,9 +8434,11 @@
                 });
                 var btn = el('btn-simpan-riwayat-bgn');
                 btn.classList.add('is-saved');
-                if (typeof AutoSave !== 'undefined') AutoSave.clear('bgn');
                 showToast('Tersimpan ke Riwayat. Memuat ulang halaman untuk data baru\u2026');
-                setTimeout(function () { location.reload(); }, 900);
+                setTimeout(function () {
+                    if (typeof AutoSave !== 'undefined') AutoSave.clear('bgn');
+                    location.reload();
+                }, 900);
             });
 
 
@@ -8396,9 +8542,11 @@
                 });
                 var btn = el('btn-simpan-riwayat-tani');
                 btn.classList.add('is-saved');
-                if (typeof AutoSave !== 'undefined') AutoSave.clear('tani');
                 showToast('Tersimpan ke Riwayat. Memuat ulang halaman untuk data baru\u2026');
-                setTimeout(function () { location.reload(); }, 900);
+                setTimeout(function () {
+                    if (typeof AutoSave !== 'undefined') AutoSave.clear('tani');
+                    location.reload();
+                }, 900);
             });
 
 
@@ -8839,6 +8987,19 @@
                 let asetBergerak = Array.prototype.map.call(document.querySelectorAll('.aset-bergerak-chk:checked'), function (c) { return c.value; });
                 let asetTidakBergerak = Array.prototype.map.call(document.querySelectorAll('.aset-tidak-bergerak-chk:checked'), function (c) { return c.value; });
 
+                /* Rincian tambahan Blok G: gram emas, serta jumlah & estimasi harga
+                   untuk lahan/rumah — hanya relevan kalau kotaknya dicentang. */
+                let emasDicentang = el("chk-emas-sosek").checked;
+                let emasGram = emasDicentang ? getRawNumber(el("emas-gram-sosek").value) : 0;
+
+                let lahanDicentang = el("chk-lahan-sosek").checked;
+                let lahanJumlah = lahanDicentang ? getRawNumber(el("lahan-jumlah-sosek").value) : 0;
+                let lahanHarga = lahanDicentang ? getRawNumber(el("lahan-harga-sosek").value) : 0;
+
+                let rumahDicentang = el("chk-rumah-sosek").checked;
+                let rumahJumlah = rumahDicentang ? getRawNumber(el("rumah-jumlah-sosek").value) : 0;
+                let rumahHarga = rumahDicentang ? getRawNumber(el("rumah-harga-sosek").value) : 0;
+
                 /* Headline output utama */
                 el("out-pangan-minggu-sosek").innerText = formatRp(panganMinggu);
                 el("out-nonpangan-bulan-sosek").innerText = formatRp(totalNonPanganBulan);
@@ -8936,6 +9097,9 @@
                         atapBahan: atapBahan, atapKondisi: atapKondisi
                     },
                     asetBergerak: asetBergerak, asetTidakBergerak: asetTidakBergerak,
+                    emasGram: emasGram,
+                    lahanJumlah: lahanJumlah, lahanHarga: lahanHarga,
+                    rumahJumlah: rumahJumlah, rumahHarga: rumahHarga,
                     motorList: collectKendaraanTerpilih('motor'),
                     mobilList: collectKendaraanTerpilih('mobil')
                 };
@@ -8945,10 +9109,37 @@
             ["pangan-harian-sosek", "listrik-sosek", "lpg-harga-sosek", "bensin-harga-sosek",
                 "sabunmandi-harga-sosek", "sabuncuci-harga-sosek", "arisan-harian-sosek",
                 "internet-sosek", "lainnya-sosek",
-                "pajak-kendaraan-sosek", "pajak-rumah-sosek", "hariraya-sosek", "ukt-semester-sosek"
+                "pajak-kendaraan-sosek", "pajak-rumah-sosek", "hariraya-sosek", "ukt-semester-sosek",
+                "lahan-harga-sosek", "rumah-harga-sosek"
             ].forEach(function (id) {
                 el(id).addEventListener("keyup", function () { formatInputRibuan(this); });
             });
+
+            /* Blok G — tampilkan input rincian (gram/jumlah/harga) begitu
+               centang Emas, Tanah/Sawah/Kebun, atau Rumah/Bangunan Lain aktif;
+               sembunyikan lagi (tanpa menghapus isinya) kalau dicentang ulang.
+               Diekspos ke window supaya bisa dipanggil ulang setelah draft
+               dipulihkan (mis. saat mode Edit), karena AutoSave.restore()
+               tidak memicu event "change" pada checkbox. */
+            var ASET_DETAIL_PAIRS = [
+                { chk: "chk-emas-sosek", detail: "detail-emas-sosek" },
+                { chk: "chk-lahan-sosek", detail: "detail-lahan-sosek" },
+                { chk: "chk-rumah-sosek", detail: "detail-rumah-sosek" }
+            ];
+            function syncAsetDetailSosek() {
+                ASET_DETAIL_PAIRS.forEach(function (pair) {
+                    var chkEl = el(pair.chk);
+                    var detailEl = el(pair.detail);
+                    if (!chkEl || !detailEl) return;
+                    detailEl.style.display = chkEl.checked ? "" : "none";
+                });
+            }
+            ASET_DETAIL_PAIRS.forEach(function (pair) {
+                var chkEl = el(pair.chk);
+                if (chkEl) chkEl.addEventListener("change", syncAsetDetailSosek);
+            });
+            syncAsetDetailSosek();
+            window.kwSyncAsetDetailSosek = syncAsetDetailSosek;
 
             /* Blok 0 & Blok D disinkronkan otomatis dari Blok 1 (identitas) dan
                Blok 3 (total pendapatan per anggota) milik KeluargaStore, supaya
@@ -9199,6 +9390,14 @@
                 var kdata = KeluargaStore.load();
                 var idn = kdata.identitas || {};
                 var editingId = KeluargaStore.getEditingId ? KeluargaStore.getEditingId() : null;
+                /* Ikutkan isian mentah form Blok 4 (bukan cuma hasil hitung) supaya
+                   saat kuesioner ini di-Edit lagi nanti, isian Blok 4-nya bisa
+                   dikembalikan persis seperti sebelum disimpan. */
+                var sosekFormRaw = null;
+                try {
+                    var rawSosek = localStorage.getItem('se2026_draft_sosek');
+                    sosekFormRaw = rawSosek ? JSON.parse(rawSosek) : null;
+                } catch (e) { sosekFormRaw = null; }
                 var entry = {
                     modul: 'keluarga',
                     nama: idn.namaKK || el('resp-nama-sosek').value.trim(),
@@ -9209,7 +9408,8 @@
                     ringkasan: generateRingkasanSosek(),
                     ringkasanLengkap: generateRingkasanLengkap(),
                     snapshotKeluarga: JSON.parse(JSON.stringify(kdata)),
-                    snapshotSosek: JSON.parse(JSON.stringify(lastHasilSosek))
+                    snapshotSosek: JSON.parse(JSON.stringify(lastHasilSosek)),
+                    snapshotSosekForm: sosekFormRaw
                 };
                 var pesanToast;
                 if (editingId && Riwayat.update(editingId, entry)) {
@@ -9220,23 +9420,25 @@
                     pesanToast = 'Kuesioner keluarga (Blok 1\u20134) tersimpan ke Riwayat. Memuat ulang halaman untuk kuesioner baru\u2026';
                 }
 
-                /* Setelah Blok 1-4 tersimpan, bersihkan seluruh draft (kuesioner
-                   keluarga & kalkulator usaha terkait) lalu refresh seluruh halaman,
-                   supaya form kembali kosong dan tidak nyangkut data keluarga
-                   sebelumnya saat mulai mendata keluarga berikutnya. */
-                KeluargaStore.clear();
-                ['keluarga', 'utp', 'buah', 'usaha', 'bgn', 'tani', 'sosek'].forEach(function (m) { AutoSave.clear(m); });
-                if (window.LinkKeluarga && typeof window.LinkKeluarga.clearContext === 'function') window.LinkKeluarga.clearContext();
-
                 showToast(pesanToast);
                 var btn = el('btn-simpan-riwayat-sosek');
                 btn.classList.add('is-saved');
-                setTimeout(function () { location.reload(); }, 900);
+                /* Bersihkan seluruh draft (kuesioner keluarga & kalkulator usaha
+                   terkait) TEPAT sebelum reload, bukan lebih awal -- supaya tidak ada
+                   auto-save debounce yang sempat menulis ulang draft lama ke
+                   localStorage di sela-sela jeda sebelum halaman dimuat ulang. */
+                setTimeout(function () {
+                    KeluargaStore.clear();
+                    ['keluarga', 'utp', 'buah', 'usaha', 'bgn', 'tani', 'sosek'].forEach(function (m) { AutoSave.clear(m); });
+                    if (window.LinkKeluarga && typeof window.LinkKeluarga.clearContext === 'function') window.LinkKeluarga.clearContext();
+                    location.reload();
+                }, 900);
             });
 
 
             AutoSave.bind('sosek', el('form-sosek'));
             AutoSave.restore('sosek', el('form-sosek'));
+            syncAsetDetailSosek();
 
             el("btn-hitung-sosek").addEventListener("click", hitungSosek);
         }
