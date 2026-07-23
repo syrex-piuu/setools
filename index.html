@@ -3462,6 +3462,40 @@
             line-height: 1.7;
         }
 
+        .pd-print-content .pd-meta-name {
+            font-size: 12px;
+            margin-bottom: 4px;
+        }
+
+        .pd-print-content .pd-meta-items {
+            display: flex;
+            flex-wrap: wrap;
+            row-gap: 4px;
+        }
+
+        .pd-print-content .pd-meta-item {
+            white-space: nowrap;
+        }
+
+        .pd-print-content .pd-meta-item:not(:last-child)::after {
+            content: "\00b7";
+            display: inline-block;
+            margin: 0 8px;
+            color: #999;
+        }
+
+        @media (max-width: 480px) {
+            .pd-print-content .pd-meta-items {
+                flex-direction: column;
+                row-gap: 2px;
+            }
+
+            .pd-print-content .pd-meta-item:not(:last-child)::after {
+                content: "";
+                margin: 0;
+            }
+        }
+
         .pd-print-content .pd-blok {
             margin-bottom: 20px;
             page-break-inside: avoid;
@@ -4006,6 +4040,12 @@
                                     <input type="text" id="resp-sls-utp" placeholder="Contoh: SLS 12">
                                 </div>
                             </div>
+                            <div class="field">
+                                <label class="field-label" for="resp-tahun-mulai-utp">Tahun Mulai/Beroperasi
+                                    Usaha</label>
+                                <input type="text" id="resp-tahun-mulai-utp" inputmode="numeric"
+                                    placeholder="Contoh: 2018">
+                            </div>
                         </fieldset>
 
                         <fieldset>
@@ -4293,6 +4333,12 @@
                                     <input type="text" id="resp-sls-buah" placeholder="Contoh: SLS 12">
                                 </div>
                             </div>
+                            <div class="field">
+                                <label class="field-label" for="resp-tahun-mulai-buah">Tahun Mulai/Beroperasi
+                                    Usaha</label>
+                                <input type="text" id="resp-tahun-mulai-buah" inputmode="numeric"
+                                    placeholder="Contoh: 2018">
+                            </div>
                         </fieldset>
 
                         <fieldset>
@@ -4562,6 +4608,12 @@
                                     <label class="field-label" for="resp-sls-usaha">SLS / RT</label>
                                     <input type="text" id="resp-sls-usaha" placeholder="Contoh: SLS 12">
                                 </div>
+                            </div>
+                            <div class="field">
+                                <label class="field-label" for="resp-tahun-mulai-usaha">Tahun Mulai/Beroperasi
+                                    Usaha</label>
+                                <input type="text" id="resp-tahun-mulai-usaha" inputmode="numeric"
+                                    placeholder="Contoh: 2018">
                             </div>
                         </fieldset>
 
@@ -5468,6 +5520,35 @@
 
                         <fieldset>
                             <div class="blok-label"><span class="dot"></span>Blok F &mdash; Kondisi Perumahan</div>
+
+                            <div class="field">
+                                <label class="field-label">Status Kepemilikan Rumah</label>
+                                <div class="csel">
+                                    <button type="button" class="csel-trigger" aria-haspopup="listbox" aria-expanded="false">
+                                        <span class="csel-value">Pilih status kepemilikan&hellip;</span>
+                                        <svg class="csel-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9" /></svg>
+                                    </button>
+                                    <ul class="csel-panel" role="listbox" tabindex="-1">
+                                        <li class="csel-opt" role="option" data-value="">Pilih status kepemilikan&hellip;</li>
+                                        <li class="csel-opt" role="option" data-value="Milik Sendiri">Milik Sendiri</li>
+                                        <li class="csel-opt" role="option" data-value="Bebas Sewa">Bebas Sewa</li>
+                                        <li class="csel-opt" role="option" data-value="Sewa/Kontrak">Sewa / Kontrak</li>
+                                        <li class="csel-opt" role="option" data-value="Dinas">Dinas</li>
+                                        <li class="csel-opt" role="option" data-value="Lainnya">Lainnya</li>
+                                    </ul>
+                                    <input type="hidden" id="status-kepemilikan-rumah-sosek" value="">
+                                </div>
+                            </div>
+                            <div class="field" id="harga-sewa-wrap-sosek" style="display:none;">
+                                <label class="field-label" for="harga-sewa-rumah-sosek">Perkiraan Harga Sewa /
+                                    Disewakan per Bulan</label>
+                                <div class="prefix-wrap"><span class="rp">Rp</span><input type="text"
+                                        id="harga-sewa-rumah-sosek" inputmode="numeric"
+                                        placeholder="Contoh: 500.000"></div>
+                                <small class="hint">Untuk Milik Sendiri/Bebas Sewa: perkiraan harga bila rumah ini
+                                    disewakan. Untuk Sewa/Kontrak: harga sewa yang sesungguhnya dibayar.</small>
+                            </div>
+
                             <small class="hint" style="display:block;margin-bottom:14px;">Untuk tiap komponen, pilih
                                 bahan bangunan utama terlebih dahulu, baru kondisinya saat ini.</small>
 
@@ -6382,10 +6463,15 @@
                 '<div class="pd-eyebrow">Sensus Ekonomi 2026</div>' +
                 '<h1>Kuesioner Keluarga Terpadu</h1>' +
                 '<div class="pd-meta">' +
-                'Nama Kepala Keluarga: <b>' + pdfEsc(idn.namaKK || '-') + '</b><br>' +
-                'SLS/RT: <b>' + pdfEsc(idn.sls || '-') + '</b> &nbsp;&middot;&nbsp; No. Urut Bangunan: <b>' + pdfEsc(idn.noUrut || '-') + '</b> &nbsp;&middot;&nbsp; No. WA/HP: <b>' + pdfEsc(idn.noWa || '-') + '</b><br>' +
-                'Alamat Sesuai KK: <b>' + pdfEsc(idn.alamatSesuaiKK || '-') + '</b> &nbsp;&middot;&nbsp; Jumlah Anggota Keluarga yang Menetap: <b>' + pdfEsc(idn.jumlahMenetap || '-') + '</b><br>' +
-                'Dicetak: ' + new Date().toLocaleString('id-ID') +
+                '<div class="pd-meta-name">Nama Kepala Keluarga: <b>' + pdfEsc(idn.namaKK || '-') + '</b></div>' +
+                '<div class="pd-meta-items">' +
+                '<span class="pd-meta-item">SLS/RT: <b>' + pdfEsc(idn.sls || '-') + '</b></span>' +
+                '<span class="pd-meta-item">No. Urut Bangunan: <b>' + pdfEsc(idn.noUrut || '-') + '</b></span>' +
+                '<span class="pd-meta-item">No. WA/HP: <b>' + pdfEsc(idn.noWa || '-') + '</b></span>' +
+                '<span class="pd-meta-item">Alamat Sesuai KK: <b>' + pdfEsc(idn.alamatSesuaiKK || '-') + '</b></span>' +
+                '<span class="pd-meta-item">Jumlah Anggota Menetap: <b>' + pdfEsc(idn.jumlahMenetap || '-') + '</b></span>' +
+                '<span class="pd-meta-item">Dicetak: ' + new Date().toLocaleString('id-ID') + '</span>' +
+                '</div>' +
                 '</div></div>' +
 
                 '<div class="pd-blok"><h2>Blok 1 &mdash; Anggota Keluarga</h2>' +
@@ -6425,6 +6511,11 @@
                 '</table>' +
 
                 '<h3>Kondisi Perumahan</h3>' +
+                '<table><tr><th>Kategori</th><th class="num">Keterangan</th></tr>' +
+                '<tr><td>Luas Bangunan</td><td class="num">' + (per.luasBangunanM2 ? (Math.round(per.luasBangunanM2 * 100) / 100).toLocaleString('id-ID') + ' m\u00b2' : '-') + '</td></tr>' +
+                '<tr><td>Status Kepemilikan Rumah</td><td class="num">' + pdfEsc(per.statusKepemilikanRumah || '-') + '</td></tr>' +
+                (per.hargaSewaRumah ? '<tr><td>Perkiraan Harga Sewa / Disewakan per Bulan</td><td class="num">' + pdfRp(per.hargaSewaRumah) + '</td></tr>' : '') +
+                '</table>' +
                 '<table><tr><th>Komponen</th><th>Bahan Utama</th><th>Kondisi</th></tr>' +
                 '<tr><td>Lantai</td><td>' + pdfEsc(per.lantaiBahan || '-') + '</td><td>' + pdfEsc(per.lantaiKondisi || '-') + '</td></tr>' +
                 '<tr><td>Dinding</td><td>' + pdfEsc(per.dindingBahan || '-') + '</td><td>' + pdfEsc(per.dindingKondisi || '-') + '</td></tr>' +
@@ -6792,7 +6883,10 @@
                     '<div class="riwayat-detail-row"><span class="k">Non-Pangan Rutin / Tahun</span><span class="v">' + fmtRpDetail(sosek.totalRutinTahun) + '</span></div>';
 
                 var per = sosek.perumahan || {};
-                var perumahanHtml = (per.lantaiBahan || per.dindingBahan || per.atapBahan) ?
+                var perumahanHtml = (per.lantaiBahan || per.dindingBahan || per.atapBahan || per.luasBangunanM2 || per.statusKepemilikanRumah) ?
+                    '<div class="riwayat-detail-row"><span class="k">Luas Bangunan</span><span class="v">' + (per.luasBangunanM2 ? (Math.round(per.luasBangunanM2 * 100) / 100).toLocaleString('id-ID') + ' m\u00b2' : '-') + '</span></div>' +
+                    '<div class="riwayat-detail-row"><span class="k">Status Kepemilikan Rumah</span><span class="v">' + escapeHtml(per.statusKepemilikanRumah || '-') + '</span></div>' +
+                    (per.hargaSewaRumah ? '<div class="riwayat-detail-row"><span class="k">Perkiraan Harga Sewa/Bulan</span><span class="v">' + fmtRpDetail(per.hargaSewaRumah) + '</span></div>' : '') +
                     '<div class="riwayat-detail-row"><span class="k">Lantai</span><span class="v">' + escapeHtml(per.lantaiBahan || '-') + (per.lantaiKondisi ? ' (' + escapeHtml(per.lantaiKondisi) + ')' : '') + '</span></div>' +
                     '<div class="riwayat-detail-row"><span class="k">Dinding</span><span class="v">' + escapeHtml(per.dindingBahan || '-') + (per.dindingKondisi ? ' (' + escapeHtml(per.dindingKondisi) + ')' : '') + '</span></div>' +
                     '<div class="riwayat-detail-row"><span class="k">Atap</span><span class="v">' + escapeHtml(per.atapBahan || '-') + (per.atapKondisi ? ' (' + escapeHtml(per.atapKondisi) + ')' : '') + '</span></div>'
@@ -7023,6 +7117,7 @@
                             if (formSosek) formSosek.reset();
                         }
                         if (typeof window.kwSyncAsetDetailSosek === 'function') window.kwSyncAsetDetailSosek();
+                        if (typeof window.kwSyncHargaSewaSosek === 'function') window.kwSyncHargaSewaSosek();
 
                         switchView('keluarga');
                         setTimeout(function () {
@@ -8270,11 +8365,13 @@
                 var nama = el('resp-nama-utp').value.trim() || '(Tanpa nama responden)';
                 var noUrut = el('resp-nourut-utp').value.trim() || '-';
                 var sls = el('resp-sls-utp').value.trim() || '-';
+                var tahunMulai = el('resp-tahun-mulai-utp').value.trim() || '-';
                 return [
                     '=== KALKULATOR PERTANIAN (Instrumen 01) ===',
                     'Nama: ' + nama,
                     'No. Urut Bangunan: ' + noUrut,
                     'SLS/RT: ' + sls,
+                    'Tahun Mulai/Beroperasi Usaha: ' + tahunMulai,
                     'Komoditas: ' + h.komoditasLabel,
                     '--- Pengeluaran / Tahun ---',
                     'Biaya Produksi: ' + formatRp(h.biayaProduksi),
@@ -8502,11 +8599,13 @@
                 var nama = el('resp-nama-buah').value.trim() || '(Tanpa nama responden)';
                 var noUrut = el('resp-nourut-buah').value.trim() || '-';
                 var sls = el('resp-sls-buah').value.trim() || '-';
+                var tahunMulai = el('resp-tahun-mulai-buah').value.trim() || '-';
                 return [
                     '=== KALKULATOR PEDAGANG BUAH KELILING (Instrumen 02) ===',
                     'Nama: ' + nama,
                     'No. Urut Bangunan: ' + noUrut,
                     'SLS/RT: ' + sls,
+                    'Tahun Mulai/Beroperasi Usaha: ' + tahunMulai,
                     'Komoditas: ' + h.namaBuah,
                     'Muatan: ' + h.muatanTotal.toLocaleString('id-ID') + ' kg (beli ' + h.buahBeli.toLocaleString('id-ID') + ' kg, sendiri ' + h.buahSendiri.toLocaleString('id-ID') + ' kg)',
                     '--- Per Sekali Jalan (Trip) ---',
@@ -8796,6 +8895,7 @@
                 var nama = el('resp-nama-usaha').value.trim() || '(Tanpa nama responden)';
                 var noUrut = el('resp-nourut-usaha').value.trim() || '-';
                 var sls = el('resp-sls-usaha').value.trim() || '-';
+                var tahunMulai = el('resp-tahun-mulai-usaha').value.trim() || '-';
                 var labelCara = (h.cara === 'bersih') ? 'Langsung Bersih' : ((h.model === 'jasa') ? 'Jasa' : 'Dagang');
                 var labelOmsetRingkas = (h.cara === 'bersih') ? 'Bersih Usaha (sebelum ops)' : 'Omset (Kotor)';
                 return [
@@ -8803,6 +8903,7 @@
                     'Nama: ' + nama,
                     'No. Urut Bangunan: ' + noUrut,
                     'SLS/RT: ' + sls,
+                    'Tahun Mulai/Beroperasi Usaha: ' + tahunMulai,
                     'Jenis Usaha: ' + h.jenisLabel + ' (Mode ' + labelCara + ')',
                     '--- Per Bulan ---',
                     'Biaya Produksi: ' + formatRupiah(h.modalBulanan),
@@ -9505,6 +9606,11 @@
                 let totalRutinTahun = pajakKendaraan + pajakRumah + hariRaya + uktTahun;
 
                 /* Blok F — Kondisi Perumahan */
+                let luasBangunanRaw = parseFloat(el("luas-bangunan-sosek").value) || 0;
+                let satuanLuas = el("satuan-luas-sosek").value;
+                let luasBangunanM2 = satuanLuas === "bata" ? luasBangunanRaw * 14 : luasBangunanRaw;
+                let statusKepemilikanRumah = el("status-kepemilikan-rumah-sosek").value;
+                let hargaSewaRumah = STATUS_PERLU_HARGA_SEWA[statusKepemilikanRumah] ? getRawNumber(el("harga-sewa-rumah-sosek").value) : 0;
                 let lantaiBahan = el("lantai-bahan-sosek").value;
                 let lantaiKondisiEl = document.querySelector('input[name="lantai_kondisi_sosek"]:checked');
                 let lantaiKondisi = lantaiKondisiEl ? lantaiKondisiEl.value : '';
@@ -9626,6 +9732,8 @@
                     totalPengeluaranTahun: totalPengeluaranTahun,
                     selisihBulan: selisihBulan,
                     perumahan: {
+                        luasBangunanRaw: luasBangunanRaw, satuanLuas: satuanLuas, luasBangunanM2: luasBangunanM2,
+                        statusKepemilikanRumah: statusKepemilikanRumah, hargaSewaRumah: hargaSewaRumah,
                         lantaiBahan: lantaiBahan, lantaiKondisi: lantaiKondisi,
                         dindingBahan: dindingBahan, dindingKondisi: dindingKondisi,
                         atapBahan: atapBahan, atapKondisi: atapKondisi
@@ -9674,6 +9782,25 @@
             });
             syncAsetDetailSosek();
             window.kwSyncAsetDetailSosek = syncAsetDetailSosek;
+
+            /* Blok F — tampilkan input "Perkiraan Harga Sewa/Disewakan" hanya
+               untuk status kepemilikan Milik Sendiri, Bebas Sewa, atau
+               Sewa/Kontrak; sembunyikan untuk Dinas/Lainnya. Diekspos ke window
+               supaya bisa dipanggil ulang setelah draft dipulihkan (mis. saat
+               mode Edit), karena AutoSave.restore() tidak memicu event
+               "change" pada dropdown custom (csel). */
+            var STATUS_PERLU_HARGA_SEWA = { 'Milik Sendiri': true, 'Bebas Sewa': true, 'Sewa/Kontrak': true };
+            function syncHargaSewaSosek() {
+                var statusEl = el('status-kepemilikan-rumah-sosek');
+                var wrapEl = el('harga-sewa-wrap-sosek');
+                if (!statusEl || !wrapEl) return;
+                wrapEl.style.display = STATUS_PERLU_HARGA_SEWA[statusEl.value] ? '' : 'none';
+            }
+            var statusKepemilikanEl = el('status-kepemilikan-rumah-sosek');
+            if (statusKepemilikanEl) statusKepemilikanEl.addEventListener('change', syncHargaSewaSosek);
+            syncHargaSewaSosek();
+            window.kwSyncHargaSewaSosek = syncHargaSewaSosek;
+            el('harga-sewa-rumah-sosek').addEventListener('keyup', function () { formatInputRibuan(this); });
 
             /* Blok 0 & Blok D disinkronkan otomatis dari Blok 1 (identitas) dan
                Blok 3 (total pendapatan per anggota) milik KeluargaStore, supaya
@@ -9992,6 +10119,7 @@
             AutoSave.bind('sosek', el('form-sosek'));
             AutoSave.restore('sosek', el('form-sosek'));
             syncAsetDetailSosek();
+            syncHargaSewaSosek();
 
             el("btn-hitung-sosek").addEventListener("click", hitungSosek);
         }
