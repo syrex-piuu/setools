@@ -7347,6 +7347,16 @@
                            kosong/data orang lain. */
                         var rawInput = null;
                         try {
+                            /* Paksa simpan draft SEKARANG JUGA (bukan menunggu jeda
+                               debounce autosave 400ms), supaya kalau pengguna menekan
+                               "Hitung" lalu langsung menekan tombol ini tanpa jeda,
+                               isian yang baru saja diketik (mis. Luas Lahan) tidak
+                               keburu hilang/tidak ke-capture karena draft di
+                               localStorage belum sempat ter-update. */
+                            var formEl = document.getElementById('form-' + moduleId);
+                            if (formEl && typeof AutoSave !== 'undefined' && typeof AutoSave.save === 'function') {
+                                AutoSave.save(moduleId, formEl);
+                            }
                             var rawDraft = localStorage.getItem('se2026_draft_' + moduleId);
                             rawInput = rawDraft ? JSON.parse(rawDraft) : null;
                         } catch (eRaw) { rawInput = null; }
